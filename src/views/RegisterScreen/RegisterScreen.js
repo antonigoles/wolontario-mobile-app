@@ -9,36 +9,36 @@ export default function RegisterScreen({ navigation }) {
     const [ registerButtonDisabled, setRegisterButtonDisabled ] = useState(true);
 
     return (
-    <View style={style.view}>
-        <View style={style.header}>
-            <Text style={style.headerTop}>
-                Cześć!
-            </Text>
-            <Text style={style.headerSub}>
-                <Text> Stwórz konto lub </Text>
-                <Text 
-                    style={style.joinButton}
-                    onPress={()=>navigation.navigate('Login')}
-                > 
-                    Zaloguj się
-                </Text> 
-            </Text>
-        </View>
-        <View style={style.inputContainer}>
-            <View style={style.nameFormContainer}> 
-                <WTextInput isHalfSize={true} containerStyle={{...style.textForm, ...style.nameForm }} label="Imie" placeholder="Wpisz swoje imie" />
-                <WTextInput isHalfSize={true} containerStyle={{...style.textForm, ...style.nameForm }} label="Nazwisko" placeholder="Wpisz swoje nazwisko" />
+        <View style={style.view}>
+            <View style={style.header}>
+                <Text style={style.headerTop}>
+                    Cześć!
+                </Text>
+                <Text style={style.headerSub}>
+                    <Text> Stwórz konto lub </Text>
+                    <Text 
+                        style={style.joinButton}
+                        onPress={()=>navigation.navigate('Login')}
+                    > 
+                        Zaloguj się
+                    </Text> 
+                </Text>
             </View>
-            
-            <WTextInput containerStyle={style.textForm} label="Email" placeholder="Wpisz swój adres email" isSecure={true} />
-            <WTextInput containerStyle={style.textForm} label="Hasło" placeholder="Wpisz swoje hasło" isSecure={true} />
-            <WTextInput containerStyle={style.textForm} label="Potwierdź Hasło" placeholder="Potwierdź swoje hasło" isSecure={true} />
-            <WCheckbox label="I agree to the terms and conditions" />
+            <View style={style.inputContainer}>
+                <View style={style.nameFormContainer}> 
+                    <WTextInput isHalfSize={true} containerStyle={{...style.textForm, ...style.nameForm }} label="Imie" placeholder="Wpisz swoje imie" />
+                    <WTextInput isHalfSize={true} containerStyle={{...style.textForm, ...style.nameForm }} label="Nazwisko" placeholder="Wpisz swoje nazwisko" />
+                </View>
+                
+                <WTextInput containerStyle={style.textForm} label="Email" placeholder="Wpisz swój adres email" isSecure={true} />
+                <WTextInput containerStyle={style.textForm} label="Hasło" placeholder="Wpisz swoje hasło" isSecure={true} />
+                <WTextInput containerStyle={style.textForm} label="Potwierdź Hasło" placeholder="Potwierdź swoje hasło" isSecure={true} />
+                <WCheckbox onChange={() => { }} label="Akceptuje warunki korzystania z serwisu" />
+            </View>
+            <View>
+            <WButton disabled={registerButtonDisabled} containerStyle={style.registerButton} label="Stwórz konto" />
+            </View>
         </View>
-        <View>
-        <WButton disabled={registerButtonDisabled} containerStyle={style.registerButton} label="Stwórz konto" />
-        </View>
-    </View>
     );
 }
 

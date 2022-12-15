@@ -1,9 +1,7 @@
-import { View, Text, TextInput, StyleSheet  } from 'react-native';
+import { View, Text, Pressable  , StyleSheet  } from 'react-native';
 import StyleStatics from '../StyleStatics';
-import React from 'react'
-import { SvgUri } from "react-native-svg";
-
-
+import React, { useState } from 'react'
+import CheckmarkIcon from "../../assets/icons/checkmark.svg";
 
 const style = StyleSheet.create({
   view: {
@@ -13,14 +11,16 @@ const style = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'flex-start',
     alignItems: 'center',
-    borderRadius: 24,
   },
 
   mark: {
-    height: 25,
-    width: 25,
-    backgroundColor: StyleStatics.primary,
-    borderRadius: 8,
+    height: 20,
+    width: 20,
+    borderRadius: 6,
+  },
+
+  markIcon: {
+    color: StyleStatics.white,
   },
 
   label: {
@@ -29,23 +29,34 @@ const style = StyleSheet.create({
     fontWeight: 'regular',
     fontSize: 14,
     textAlign: 'left',
-    marginLeft: 5,
+    marginLeft: 7,
   }
 })
 
-export default function WCheckbox({ label, containerStyle, checked }) {
-  return (
-    <View style={ { ...containerStyle, ...style.view } }>
-        <View style={style.mark}> 
-            <SvgUri 
-                width={25}
-                height={25}
-                uri="../../assets/icons/checkmark.svg"
-            />
-        </View>
-        <Text style={style.label}>{label}</Text>
-    </View>
-  );
+export default function WCheckbox({ label, containerStyle, isChecked=false, onChange }) {
+    const [ checked, setChecked ] = useState( isChecked );
+
+    return (
+        <Pressable   onPress={() => {
+            setChecked( !checked );
+            if ( onChange ) onChange();
+        }} style={ { ...containerStyle, ...style.view } }>
+            <View style={
+                { 
+                    ...( checked ? { backgroundColor: StyleStatics.primary } : { backgroundColor: StyleStatics.disabled }) ,
+                    ...style.mark, 
+                }}> 
+                { checked ? <CheckmarkIcon 
+                    height="100%" 
+                    preserveAspectRatio="xMinYMin slice"  
+                    width="100%" 
+                    viewBox="-2 -2 50 50" 
+                    fill={style.markIcon.color} 
+                /> : ""}
+            </View>
+            <Text style={style.label}>{label}</Text>
+        </Pressable  >
+    );
 }
 
 

@@ -1,10 +1,11 @@
-	import { useState } from 'react';
-	import { View, StyleSheet, Text } from 'react-native'
-	import WTextInput from "../../components/WTextInput";
-	import WButton from "../../components/WButton";
-	import StyleStatics from '../../StyleStatics';
+import { useState } from 'react';
+import { View, StyleSheet, Text } from 'react-native'
+import WTextInput from "../../components/WTextInput";
+import WButton from "../../components/WButton";
+import WCheckbox from "../../components/WCheckbox";
+import StyleStatics from '../../StyleStatics';
 
-	export default function LoginScreen({ navigation }) {
+export default function LoginScreen({ navigation }) {
 	const [ loginButtonDisabled, setLoginButtonDisabled ] = useState(true);
 
 	return (
@@ -26,6 +27,7 @@
 		<View style={style.inputContainer}>
 			<WTextInput containerStyle={style.textForm} label="Email" placeholder="Wpisz swój adres email" />
 			<WTextInput containerStyle={style.textForm} label="Hasło" placeholder="Wpisz swoje hasło" isSecure={true} />
+			<WCheckbox label="Zapamiętaj mnie" />
 		</View>
 		<View>
 			<WButton disabled={loginButtonDisabled} containerStyle={style.loginButton} label="Zaloguj" />
