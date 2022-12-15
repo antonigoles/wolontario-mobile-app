@@ -11,6 +11,10 @@
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
+    "packagerOpts": {
+      "config": "metro.config.js",
+      "sourceExts": ["js", "jsx", "css"]
+    },
     "updates": {
       "fallbackToCacheTimeout": 0
     },
