@@ -26,7 +26,7 @@ const style = StyleSheet.create({
   }
 })
 
-export default function WTextForm({ label, placeholder, isSecure=false, containerStyle, isHalfSize=false }) {
+export default function WTextForm({ label, placeholder, isSecure=false, containerStyle, isHalfSize=false, onUpdate }) {
 
   const [ showSecured, setShowSecured ] = useState( false )
 
@@ -38,6 +38,7 @@ export default function WTextForm({ label, placeholder, isSecure=false, containe
         placeholder={placeholder}
         placeholderTextColor={StyleStatics.placeholderText}
         secureTextEntry={showSecured}
+        onChangeText={onUpdate}
       />
       { isSecure ? 
         <View style={style.showButton}>

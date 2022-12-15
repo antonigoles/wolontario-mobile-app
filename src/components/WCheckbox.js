@@ -39,7 +39,7 @@ export default function WCheckbox({ label, containerStyle, isChecked=false, onCh
     return (
         <Pressable   onPress={() => {
             setChecked( !checked );
-            if ( onChange ) onChange();
+            if ( onChange ) onChange( !checked );
         }} style={ { ...containerStyle, ...style.view } }>
             <View style={
                 { 

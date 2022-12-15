@@ -6,7 +6,36 @@ import WCheckbox from "../../components/WCheckbox";
 import StyleStatics from '../../StyleStatics';
 
 export default function LoginScreen({ navigation }) {
+	const [ error, setError ] = useState("");
 	const [ loginButtonDisabled, setLoginButtonDisabled ] = useState(true);
+
+	const [ loginData, setLoginData ] = useState(JSON.stringify({
+        email: "",
+        password: "",
+    }))
+
+    const updateData = (field, value) => {
+        let copyLoginData = JSON.parse(loginData);
+        copyLoginData[field] = value;
+        const validationResult = validateData( copyLoginData)
+        if ( validationResult[0] ) setLoginButtonDisabled( false );
+        else setLoginButtonDisabled( true )
+        setLoginData( JSON.stringify( copyLoginData ) )
+
+        setError(validationResult[1])
+    }
+
+    const generateOnUpdate = (field) => {
+        return ((value) => {
+            updateData( field, value )
+        })
+    }
+
+	const validateData = ( json ) => {
+        if ( !validateEmail(json.email) ) return [false, "Niepoprawny adres email" ];   
+		if ( json.password.length < 8 ) return [false, "Za krótkie hasło"]
+        return [true, ""]
+    }
 
 	return (
 		<View style={style.view}>
@@ -25,9 +54,10 @@ export default function LoginScreen({ navigation }) {
 			</Text>
 		</View>
 		<View style={style.inputContainer}>
-			<WTextInput containerStyle={style.textForm} label="Email" placeholder="Wpisz swój adres email" />
-			<WTextInput containerStyle={style.textForm} label="Hasło" placeholder="Wpisz swoje hasło" isSecure={true} />
+			<WTextInput onUpdate={generateOnUpdate("email")} containerStyle={style.textForm} label="Email" placeholder="Wpisz swój adres email" />
+			<WTextInput onUpdate={generateOnUpdate("password")} containerStyle={style.textForm} label="Hasło" placeholder="Wpisz swoje hasło" isSecure={true} />
 			<WCheckbox label="Zapamiętaj mnie" />
+			<Text style={style.error}>{error}</Text>
 		</View>
 		<View>
 			<WButton disabled={loginButtonDisabled} containerStyle={style.loginButton} label="Zaloguj" />
@@ -89,6 +119,14 @@ const style = StyleSheet.create({
 		marginVertical: 25,
 		marginTop: 80,
 		alignSelf: 'flex-end'
-	}
+	},
+
+	error: {
+        color: StyleStatics.error,
+        fontWeight: 'bold',
+        marginVertical: 5,
+        fontSize: 12,
+        textAlign: 'center'
+    }
 
 })
