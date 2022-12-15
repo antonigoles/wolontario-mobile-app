@@ -11,6 +11,7 @@ const style = StyleSheet.create({
     fontWeight: 'bold',
     marginBottom: 10,
     fontSize: 16,
+    width: 305,
   },
   textInput: {
     backgroundColor: StyleStatics.inputBlock,
@@ -25,15 +26,15 @@ const style = StyleSheet.create({
   }
 })
 
-export default function WTextForm({ label, placeholder, isSecure=false, containerStyle }) {
+export default function WTextForm({ label, placeholder, isSecure=false, containerStyle, isHalfSize=false }) {
 
   const [ showSecured, setShowSecured ] = useState( false )
 
   return (
-    <View style={containerStyle}>
+    <View style={ {...containerStyle, ...( isHalfSize ? { width: 140 } : {} ) }}>
       <Text style={style.label}>{label}</Text>
       <TextInput 
-        style={style.textInput}
+        style={ { ...style.textInput, ...( isHalfSize ? { width: 140 } : {} )  }}
         placeholder={placeholder}
         placeholderTextColor={StyleStatics.placeholderText}
         secureTextEntry={showSecured}
