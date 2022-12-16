@@ -1,24 +1,58 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { View, StyleSheet, Text } from 'react-native'
 import WTextInput from "../../components/WTextInput";
 import WButton from "../../components/WButton";
 import WCheckbox from "../../components/WCheckbox";
 import StyleStatics from '../../StyleStatics';
 import auth from '../../api/auth.js';
+import AsyncStorage from "@react-native-async-storage/async-storage"
+import session from '../../helpers/session'
+import remeberedData from '../../helpers/remeberedData';
 
 export default function LoginScreen({ navigation }) {
 	const [ error, setError ] = useState("");
 	const [ loginButtonDisabled, setLoginButtonDisabled ] = useState(true);
+	const [ emailValue, setEmailValue ] = useState("");
+	const [ passwordValue, setPasswordValue ] = useState(""); 
 
 	const [ loginData, setLoginData ] = useState(JSON.stringify({
         email: "",
         password: "",
+		rememberme: false,
     }))
+
+	useEffect(() => {
+		remeberedData.get( (data) => {
+			// alert(data)
+
+			// XD
+			const result = JSON.parse(JSON.parse(data));
+
+
+			// alert( Object.keys( result ) )
+			if ( result["password"] == null || result["email"] == null ) {
+				// alert("going dark")
+				return;
+			}
+
+			result["rememberme"] = true;
+
+			setPasswordValue( result.password )
+			setEmailValue( result.email )
+
+			setLoginData(JSON.stringify(result))
+
+			setLoginButtonDisabled(false);
+
+		})
+	}, [])
+
+	
 
     const updateData = (field, value) => {
         let copyLoginData = JSON.parse(loginData);
         copyLoginData[field] = value;
-        const validationResult = validateData( copyLoginData)
+        const validationResult = validateData( copyLoginData )
         if ( validationResult[0] ) setLoginButtonDisabled( false );
         else setLoginButtonDisabled( true )
         setLoginData( JSON.stringify( copyLoginData ) )
@@ -41,9 +75,18 @@ export default function LoginScreen({ navigation }) {
 	const attemptLogin = async () => {
 		// alert("test")
 		try {
-			await auth.requestLogin( JSON.parse(loginData) );
+			const data = await auth.requestLogin( JSON.parse(loginData) );
+			// alert( JSON.stringify(data) )
+			if ( data.error ) {
+				setError( data.error )
+				return;
+			} 
+			session.set( data )
+			// alert( JSON.stringify(data) )
+			if ( JSON.parse(loginData)["rememberme"] ) remeberedData.set( loginData )
+			await navigation.navigate( "Home" )
 		} catch(err) {
-			// alert(err)
+			setError(err.error)
 		}
 		
 	}
@@ -65,9 +108,9 @@ export default function LoginScreen({ navigation }) {
 			</Text>
 		</View>
 		<View style={style.inputContainer}>
-			<WTextInput onUpdate={generateOnUpdate("email")} containerStyle={style.textForm} label="Email" placeholder="Wpisz swój adres email" />
-			<WTextInput onUpdate={generateOnUpdate("password")} containerStyle={style.textForm} label="Hasło" placeholder="Wpisz swoje hasło" isSecure={true} />
-			<WCheckbox label="Zapamiętaj mnie" />
+			<WTextInput setVal={setEmailValue} val={emailValue} onUpdate={generateOnUpdate("email")} containerStyle={style.textForm} label="Email" placeholder="Wpisz swój adres email" />
+			<WTextInput setVal={setPasswordValue} val={passwordValue} onUpdate={generateOnUpdate("password")} containerStyle={style.textForm} label="Hasło" placeholder="Wpisz swoje hasło" isSecure={true} />
+			<WCheckbox onChange={generateOnUpdate("rememberme")} label="Zapamiętaj mnie" />
 			<Text style={style.error}>{error}</Text>
 		</View>
 		<View>

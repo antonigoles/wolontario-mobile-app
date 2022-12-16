@@ -1,14 +1,12 @@
+import AsyncStorage from "@react-native-async-storage/async-storage"
+
 export default {
     set(data) {
-        localStorage.setItem( "sessiondata", JSON.stringify(data) )
+        AsyncStorage.setItem( "@sessiondata", JSON.stringify(data) )
     },
     
     get( ) {
-        return localStorage.getItem("sessiondata")
-    },
-
-    async validateSession() {
-        return true;
+        return AsyncStorage.getItem("@sessiondata")
     },
 
     EMPTY_SESSION: {

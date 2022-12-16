@@ -24,8 +24,8 @@ export default function WButton({ label, onClick, containerStyle, disabled=false
   const [ pressedIn, setPressedIn ] = useState(false) 
   return (
     <Pressable 
-      onPressIn={() => {setPressedIn(true)}} 
-      onPressOut={() => {setPressedIn(false)}} 
+      onPressIn={() => { if ( !disabled ) setPressedIn(true) }} 
+      onPressOut={() => { if ( !disabled ) setPressedIn(false) }} 
       onPress={ disabled ? (()=>{}) : onClick } 
       style={ 
         { ...containerStyle, 

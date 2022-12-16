@@ -1,7 +1,3 @@
 export default function includesAny(str, list) {
-    let failed = true
-    list.forEach(e => {
-        if ( str.includes(e) ) failed = false
-    });
-    return failed
+    return str.split("").some( e => list.includes(e) )
 }

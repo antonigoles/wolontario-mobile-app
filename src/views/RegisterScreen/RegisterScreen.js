@@ -8,6 +8,8 @@ import StyleStatics from '../../StyleStatics';
 import validateEmail from '../../helpers/validateEmail';
 import validatePassword from '../../helpers/validatePassword';
 
+import auth from '../../api/auth.js'
+
 export default function RegisterScreen({ navigation }) {
     const [ registerButtonDisabled, setRegisterButtonDisabled ] = useState(true);
     const [ error, setError ] = useState("");
@@ -24,8 +26,7 @@ export default function RegisterScreen({ navigation }) {
         let copyLoginData = JSON.parse(loginData);
         copyLoginData[field] = value;
         const validationResult = validateData( copyLoginData)
-        if ( validationResult[0] ) setRegisterButtonDisabled( false );
-        else setRegisterButtonDisabled( true )
+        setRegisterButtonDisabled( !validationResult[0] );
         setLoginData( JSON.stringify( copyLoginData ) )
 
         setError(validationResult[1])
@@ -50,6 +51,19 @@ export default function RegisterScreen({ navigation }) {
         
         return [true, ""]
     }
+
+    const attemptRegister = async () => {
+		// alert("test")
+		try {
+			const data = await auth.requestRegister( JSON.parse(loginData) );
+			if ( data.error ) {
+				setError( data.error )
+			}
+		} catch(err) {
+			setError(err.error)
+		}
+		
+	}
 
     return (
         <View style={style.view}>
@@ -81,7 +95,7 @@ export default function RegisterScreen({ navigation }) {
             </View>
             <View>
                 
-                <WButton disabled={registerButtonDisabled} containerStyle={style.registerButton} label="Stwórz konto" />
+                <WButton onClick={attemptRegister} disabled={registerButtonDisabled} containerStyle={style.registerButton} label="Stwórz konto" />
             </View>
         </View>
     );
