@@ -4,6 +4,7 @@ import WTextInput from "../../components/WTextInput";
 import WButton from "../../components/WButton";
 import WCheckbox from "../../components/WCheckbox";
 import StyleStatics from '../../StyleStatics';
+import auth from '../../api/auth.js';
 
 export default function LoginScreen({ navigation }) {
 	const [ error, setError ] = useState("");
@@ -37,6 +38,16 @@ export default function LoginScreen({ navigation }) {
         return [true, ""]
     }
 
+	const attemptLogin = async () => {
+		// alert("test")
+		try {
+			await auth.requestLogin( JSON.parse(loginData) );
+		} catch(err) {
+			// alert(err)
+		}
+		
+	}
+
 	return (
 		<View style={style.view}>
 		<View style={style.header}>
@@ -60,7 +71,7 @@ export default function LoginScreen({ navigation }) {
 			<Text style={style.error}>{error}</Text>
 		</View>
 		<View>
-			<WButton disabled={loginButtonDisabled} containerStyle={style.loginButton} label="Zaloguj" />
+			<WButton onClick={attemptLogin} disabled={loginButtonDisabled} containerStyle={style.loginButton} label="Zaloguj" />
 		</View>
 		</View>
 	);

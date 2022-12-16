@@ -73,7 +73,7 @@ export default function RegisterScreen({ navigation }) {
                     <WTextInput onUpdate={ generateOnUpdate("surname") } isHalfSize={true} containerStyle={{...style.textForm, ...style.nameForm }} label="Nazwisko" placeholder="Wpisz swoje nazwisko" />
                 </View>
                 
-                <WTextInput onUpdate={ generateOnUpdate("email") } containerStyle={style.textForm} label="Email" placeholder="Wpisz swój adres email" isSecure={true} />
+                <WTextInput onUpdate={ generateOnUpdate("email") } containerStyle={style.textForm} label="Email" placeholder="Wpisz swój adres email" />
                 <WTextInput onUpdate={ generateOnUpdate("password") } containerStyle={style.textForm} label="Hasło" placeholder="Wpisz swoje hasło" isSecure={true} />
                 <WTextInput onUpdate={ generateOnUpdate("confirmPass") } containerStyle={style.textForm} label="Potwierdź Hasło" placeholder="Potwierdź swoje hasło" isSecure={true} />
                 <WCheckbox  checked={false} onChange={ generateOnUpdate("tosAccepted") } label="Akceptuje warunki korzystania z serwisu" />

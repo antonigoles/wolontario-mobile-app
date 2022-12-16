@@ -1,4 +1,4 @@
-import { View, Text, TextInput, StyleSheet  } from 'react-native';
+import { View, Text, TextInput, StyleSheet, Pressable  } from 'react-native';
 import StyleStatics from '../StyleStatics';
 import React from 'react'
 import { useState  } from 'react';
@@ -20,12 +20,22 @@ const style = StyleSheet.create({
   }
 })
 
-export default function WButton({ label, containerStyle, disabled=false }) {
+export default function WButton({ label, onClick, containerStyle, disabled=false }) {
+  const [ pressedIn, setPressedIn ] = useState(false) 
   return (
-    <View style={ { ...containerStyle, ...style.view, 
-    ...{ backgroundColor: (disabled ? StyleStatics.disabled : StyleStatics.primary) } } }>
+    <Pressable 
+      onPressIn={() => {setPressedIn(true)}} 
+      onPressOut={() => {setPressedIn(false)}} 
+      onPress={ disabled ? (()=>{}) : onClick } 
+      style={ 
+        { ...containerStyle, 
+          ...style.view, 
+          ...{ backgroundColor: (disabled ? StyleStatics.disabled : StyleStatics.primary) },
+          ...{ opacity: pressedIn ? 0.9 : 1 }, 
+        }
+      }>
         <Text style={style.label}>{label}</Text>
-    </View>
+    </Pressable>
   );
 }
 
