@@ -62,7 +62,7 @@ export default function WTextForm({
 
   return (
     <View style={ {...containerStyle, ...( isHalfSize ? { width: 140 } : { width: 305 } ) }}>
-      <Text style={style.label}>{label}</Text>
+      { label ? <Text style={style.label}>{label}</Text> : "" }
       <View style={style.inputGroup}>
         <TextInput 
           style={ { 
