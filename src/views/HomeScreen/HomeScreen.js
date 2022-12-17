@@ -13,10 +13,18 @@ import NotifyIcon from '../../../assets/icons/notif.svg'
 import PersonIcon from '../../../assets/icons/person.svg'
 import HomeIcon from '../../../assets/icons/home.svg'
 import StyleStatics from '../../StyleStatics';
+import TabHeader from './TabHeader';
 
 
 
 const Tab = createBottomTabNavigator();
+
+const screenNameTranslations = {
+	"Home": "Główna",
+	"Group": "Wolontariat",
+	"Profile": "Mój profil",
+	"Notifications": "Powiadomienia",
+}
 
 export default function HomeScreen({ navigation }) {
 	// load data, if session is dead, navigate to login screen
@@ -50,13 +58,9 @@ export default function HomeScreen({ navigation }) {
 						fontFamily: 'Poppins',
 					}
 				})
-				const translation = {
-					"Home": "Główna",
-					"Group": "Wolontariat",
-					"Profile": "Mój profil",
-					"Notifications": "Powiadomienia",
-				}
-				return <Text numberOfLines={1} style={style.tabBarLabelStyle}>{ translation[route.name] }</Text>
+				return (<Text numberOfLines={1} style={style.tabBarLabelStyle}>
+					{ screenNameTranslations[route.name] }
+				</Text>)
 			},
 			tabBarIcon: ({ focused, color, size}) => {
 				const iconOptions = {
@@ -81,17 +85,29 @@ export default function HomeScreen({ navigation }) {
 			},	
 			tabBarItemStyle: {
 				padding: 16,
+			},
+			headerTitle: ((props) => 
+				<TabHeader 
+					homePage={route.name=="Home"} 
+					title={screenNameTranslations[route.name]} 
+				/>
+			),
+
+			headerStyle: {
+				height: 160,
+				backgroundColor: StyleStatics.white,
 			}
 		}),		
 	};
 
+
 	return (
 		<NavigationContainer independent={true}>
-			<Tab.Navigator  { ...bottomNavigatorConfigs } >
-				<Tab.Screen name="Home" component={HomeTab} options={{ headerShown: false }} />
-				<Tab.Screen name="Group" component={GroupTab} options={{ headerShown: false }} />
-				<Tab.Screen name="Notifications" component={NotificationTab} options={{ headerShown: false }} />
-				<Tab.Screen name="Profile" component={ProfileTab} options={{ headerShown: false }} />
+			<Tab.Navigator  {  ...bottomNavigatorConfigs } >
+				<Tab.Screen name="Home" component={HomeTab} />
+				<Tab.Screen name="Group" component={GroupTab}  />
+				<Tab.Screen name="Notifications" component={NotificationTab}  />
+				<Tab.Screen name="Profile" component={ProfileTab}  />
 			</Tab.Navigator>
     	</NavigationContainer>
 	);
