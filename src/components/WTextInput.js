@@ -52,7 +52,9 @@ export default function WTextForm({
     setVal,
     val,
   }) {
-
+  // if ( !val ) {
+  //   // val = useState("")
+  // }
   const [ showSecured, setShowSecured ] = useState( isSecure )
 
   let inputWidth = isSecure ? 305-56 : 305;
@@ -71,7 +73,7 @@ export default function WTextForm({
           placeholder={placeholder}
           placeholderTextColor={StyleStatics.placeholderText}
           secureTextEntry={showSecured}
-          onChangeText={ (data) => { onUpdate(data); if ( setVal) setVal(val); } }
+          onChangeText={ (data) => { onUpdate(data); if ( setVal) setVal(data); } }
           value={val ? val : ""}
         />
         { isSecure ? 

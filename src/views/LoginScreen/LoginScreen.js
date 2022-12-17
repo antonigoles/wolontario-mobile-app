@@ -24,16 +24,12 @@ export default function LoginScreen({ navigation }) {
 	useEffect(() => {
 		remeberedData.get( (data) => {
 			// alert(data)
-
 			// XD
 			const result = JSON.parse(JSON.parse(data));
-
+			if ( result == null ) return;
 
 			// alert( Object.keys( result ) )
-			if ( result["password"] == null || result["email"] == null ) {
-				// alert("going dark")
-				return;
-			}
+			if ( result["password"] == null || result["email"] == null ) return;
 
 			result["rememberme"] = true;
 
