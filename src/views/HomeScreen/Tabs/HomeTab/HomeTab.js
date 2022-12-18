@@ -1,8 +1,8 @@
-import { View, Text, StyleSheet, TextInput, ScrollView } from 'react-native'
-import WTextInput from '../../../../components/WTextInput'
+import { View, Text, StyleSheet, TextInput, FlatList  } from 'react-native'
 import StyleStatics from '../../../../StyleStatics'
 import SearchIcon from "../../../../../assets/icons/search.svg"
 import ArrowIcon from "../../../../../assets/icons/arrowRight1.svg"
+import WPost from '../../../../components/WPost'
 
 const searchBarStyles = StyleSheet.create({
     container: {
@@ -14,7 +14,7 @@ const searchBarStyles = StyleSheet.create({
         marginTop: 15,
     },
     inputBar: {
-        width: 240,
+        width: "55%",
         height: 64,
         backgroundColor: StyleStatics.inputBlock,
         fontSize: 14,
@@ -102,10 +102,16 @@ const styles = StyleSheet.create({
         fontSize: 14,
         color: StyleStatics.lightText,
         fontFamily: 'Poppins',
+    }, 
+    feedScroll: {
+        height: "70%",
     }
 })
 
 export default function HomeTab() {
+
+    const samplePostList = [ "test", "Test2", "Test2", "Test2", "Test2", "Test2", "Test2", "Test2", "Test2", "Test2", "Test2" ]
+
     return (
         <View style={styles.container}>
             <SearchBar />
@@ -113,9 +119,14 @@ export default function HomeTab() {
                 <Text style={styles.lastAddedLabel}> Ostatnio dodane </Text>
                 <Text style={styles.showMoreLabel}> Zobacz wszystko </Text>
             </View>
-            <ScrollView>
+            <FlatList  
+                style={styles.feedScroll}
+                data={samplePostList}
+                renderItem={WPost}
+                keyExtractor={(item,idx) => idx}
+                showsVerticalScrollIndicator={false}
 
-            </ScrollView>
+            />
         </View>
     )
 }
