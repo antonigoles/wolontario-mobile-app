@@ -51,6 +51,7 @@ export default function WTextForm({
     onUpdate,  
     setVal,
     val,
+    additionalInputParams={}
   }) {
   // if ( !val ) {
   //   // val = useState("")
@@ -65,6 +66,7 @@ export default function WTextForm({
       { label ? <Text style={style.label}>{label}</Text> : "" }
       <View style={style.inputGroup}>
         <TextInput 
+          
           style={ { 
             ...style.textInput, 
             ...( isHalfSize ? { width: halfInputWidth } : { width: inputWidth } ),
@@ -73,8 +75,14 @@ export default function WTextForm({
           placeholder={placeholder}
           placeholderTextColor={StyleStatics.placeholderText}
           secureTextEntry={showSecured}
-          onChangeText={ (data) => { onUpdate(data); if ( setVal) setVal(data); } }
-          value={val ? val : ""}
+          onChangeText={ (data) => { 
+            if ( onUpdate ) onUpdate(data); 
+            if ( setVal ) setVal(data); 
+          } }
+ 
+          { ...(val ? { value: val } : { }) }
+          { ...additionalInputParams }
+
         />
         { isSecure ? 
           <Pressable onPress={ () => { setShowSecured( !showSecured); } } style={style.showButton}>

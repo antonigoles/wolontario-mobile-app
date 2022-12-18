@@ -7,7 +7,7 @@ import LoginScreen from './src/views/LoginScreen/LoginScreen';
 import HomeScreen from './src/views/HomeScreen/HomeScreen';
 import RegisterScreen from './src/views/RegisterScreen/RegisterScreen';
 
-import { useFonts, Poppins_400Regular, Poppins_600SemiBold } from '@expo-google-fonts/poppins';
+import { useFonts, Poppins_400Regular, Poppins_600SemiBold, Poppins_500Medium } from '@expo-google-fonts/poppins';
 import { useEffect } from 'react';
 
 const Stack = createNativeStackNavigator()
@@ -16,6 +16,7 @@ export default function App() {
 	const [ fontsLoaded ] = useFonts({
 		'Poppins': Poppins_400Regular,
 		'Poppins-SemiBold': Poppins_600SemiBold,
+		'Poppins-Medium': Poppins_600SemiBold,
 	})	
 	
 	if (!fontsLoaded) {
