@@ -1,51 +1,59 @@
-import { View, Text, StyleSheet, TextInput, FlatList  } from 'react-native'
+import { View, Text, StyleSheet, TextInput, FlatList, Dimensions   } from 'react-native'
 import StyleStatics from '../../../../StyleStatics'
 import SearchIcon from "../../../../../assets/icons/search.svg"
 import ArrowIcon from "../../../../../assets/icons/arrowRight1.svg"
 import WPost from '../../../../components/WPost'
+import AnimatedTab from '../AnimatedTab';
+import responsivenessUtility from "../../../../helpers/responsivenessUtility" 
+import { useState } from 'react'
+import { Modal } from 'react-native-paper'
+const window = Dimensions.get("window");
 
-const searchBarStyles = StyleSheet.create({
-    container: {
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        flexDirection: "row",
-        width: "100%",
-        marginTop: 15,
-    },
-    inputBar: {
-        width: "55%",
-        height: 64,
-        backgroundColor: StyleStatics.inputBlock,
-        fontSize: 14,
-        fontFamily: 'Poppins-Medium',
-        // borderTopRightRadius: 20,
-        // borderBottomRightRadius: 20,
-    },
 
-    searchIconContainer: {
-        height: 64,
-        width: 64,
-        backgroundColor: StyleStatics.inputBlock,
-        borderTopLeftRadius: 20,
-        borderBottomLeftRadius: 20,
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-
-    goButton: {
-        width: 64,
-        height: 64,
-        backgroundColor: StyleStatics.primary,
-        // borderRadius: 20,
-        borderTopRightRadius: 20,
-        borderBottomRightRadius: 20,
-        // marginLeft: 10,
-    }
-})
 
 function SearchBar() {
+    const [ focusMode, setFocusMode ] = useState(false)
+    const focusModeHeight = 100;
+    const searchBarStyles = StyleSheet.create({
+        container: {
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            flexDirection: "row",
+            width: "100%",
+            marginTop: 15,
+        },
+        inputBar: {
+            width: "55%",
+            height: focusMode ? focusModeHeight : 64,
+            backgroundColor: StyleStatics.inputBlock,
+            fontSize: 14,
+            fontFamily: 'Poppins-Medium',
+            color: StyleStatics.lightText,
+            // borderTopRightRadius: 20,
+            // borderBottomRightRadius: 20,
+        },
+    
+        searchIconContainer: {
+            height: focusMode ? focusModeHeight : 64,
+            width: 64,
+            backgroundColor: StyleStatics.inputBlock,
+            borderTopLeftRadius: 20,
+            borderBottomLeftRadius: 20,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+        },
+    
+        goButton: {
+            width: 64,
+            height: focusMode ? focusModeHeight : 64,
+            backgroundColor: StyleStatics.primary,
+            // borderRadius: 20,
+            borderTopRightRadius: 20,
+            borderBottomRightRadius: 20,
+        }
+    })
     return (
         <View style={searchBarStyles.container}>
             <View style={searchBarStyles.searchIconContainer}>
@@ -57,7 +65,7 @@ function SearchBar() {
                 />
             </View>
             <TextInput 
-                style={searchBarStyles.inputBar}
+                style={ searchBarStyles.inputBar }
                 placeholder={"Szukaj ogłoszeń"}
                 placeholderTextColor={StyleStatics.disabled}
             />
@@ -104,29 +112,35 @@ const styles = StyleSheet.create({
         fontFamily: 'Poppins',
     }, 
     feedScroll: {
-        height: "70%",
+        height: window.height-375,
     }
 })
 
-export default function HomeTab() {
+
+
+export default function HomeTab({ navigation }) {
 
     const samplePostList = [ "test", "Test2", "Test2", "Test2", "Test2", "Test2", "Test2", "Test2", "Test2", "Test2", "Test2" ]
+    const minCols = 1;
+    // alert(  );
 
     return (
-        <View style={styles.container}>
-            <SearchBar />
-            <View style={styles.header}>
-                <Text style={styles.lastAddedLabel}> Ostatnio dodane </Text>
-                <Text style={styles.showMoreLabel}> Zobacz wszystko </Text>
+        <AnimatedTab navigation={navigation}>
+            <View style={styles.container}>
+                <SearchBar />
+                <View style={styles.header}>
+                    <Text style={styles.lastAddedLabel}> Ostatnio dodane </Text>
+                    <Text style={styles.showMoreLabel}> Zobacz wszystko </Text>
+                </View>
+                <FlatList  
+                    style={styles.feedScroll}
+                    data={samplePostList}
+                    renderItem={WPost}
+                    keyExtractor={(_,idx) => idx}
+                    numColumns={Math.max( minCols, Math.floor(window.width / (320+10)))}
+                    showsVerticalScrollIndicator={false}
+                />
             </View>
-            <FlatList  
-                style={styles.feedScroll}
-                data={samplePostList}
-                renderItem={WPost}
-                keyExtractor={(item,idx) => idx}
-                showsVerticalScrollIndicator={false}
-
-            />
-        </View>
+        </AnimatedTab>
     )
 }

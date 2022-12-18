@@ -6,7 +6,7 @@ const styles = StyleSheet.create({
         width: 320,
         height: 230,
         borderRadius: 24,
-        backgroundColor: StyleStatics.infoBlock,
+        backgroundColor: StyleStatics.white,
         margin: 5,
         shadowColor: '#000',
         shadowOffset: { width: 0, height: 2 },

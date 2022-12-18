@@ -1,9 +1,12 @@
 import { View, Text } from 'react-native'
+import AnimatedTab from '../AnimatedTab';
 
-export default function NotificationTab() {
+export default function NotificationTab({ navigation }) {
     return (
-        <View>
-            <Text> Notification tab </Text>
-        </View>
+        <AnimatedTab navigation={navigation}>
+            <View>
+                <Text> Notification tab </Text>
+            </View>
+        </AnimatedTab>
     )
 }

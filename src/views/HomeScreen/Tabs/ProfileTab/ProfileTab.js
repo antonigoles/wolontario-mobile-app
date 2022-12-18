@@ -1,9 +1,12 @@
 import { View, Text } from 'react-native'
+import AnimatedTab from '../AnimatedTab';
 
-export default function ProfileTab() {
+export default function ProfileTab({navigation}) {
     return (
-        <View>
-            <Text> Profile tab </Text>
-        </View>
+        <AnimatedTab navigation={navigation}>
+            <View>
+                <Text> Profile tab </Text>
+            </View>
+        </AnimatedTab>
     )
 }
