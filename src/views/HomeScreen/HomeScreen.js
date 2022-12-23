@@ -30,6 +30,7 @@ export default function HomeScreen({ navigation }) {
 	// load data, if session is dead, navigate to login screen
 	const [state, setState] = useState([]);
 	const [ navigatorVisibility, setNavigatorVisibility ] = useState(true);
+	const [ nav, setNav ] = useState(null);
 
 	useEffect(()=>{
 		// WE DONT'T WANT TO QUIT THIS
@@ -88,8 +89,9 @@ export default function HomeScreen({ navigation }) {
 			},
 			headerTitle: ((props) => 
 				<TabHeader 
-					homePage={route.name=="Home"} 
-					title={screenNameTranslations[route.name]} 
+				navigation={nav}
+				homePage={route.name=="Home"} 
+				title={screenNameTranslations[route.name]} 
 				/>
 			),
 
@@ -104,7 +106,9 @@ export default function HomeScreen({ navigation }) {
 	return (
 		<NavigationContainer independent={true}>
 			<Tab.Navigator  {  ...bottomNavigatorConfigs } >
-				<Tab.Screen name="Home" component={HomeTab} />
+				<Tab.Screen name="Home">
+					{ props => <HomeTab {...props} setNav={setNav} />}	
+				</Tab.Screen>
 				<Tab.Screen name="Group" component={GroupTab}  />
 				<Tab.Screen name="Notifications" component={NotificationTab}  />
 				<Tab.Screen name="Profile" component={ProfileTab}  />

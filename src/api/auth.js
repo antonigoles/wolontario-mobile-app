@@ -26,7 +26,7 @@ export default {
                 })
                 .then( res => res.json() )
             
-            alert( JSON.stringify( data )) 
+            // alert( JSON.stringify( data )) 
             return result;
         } catch( err ) {
             throw err;

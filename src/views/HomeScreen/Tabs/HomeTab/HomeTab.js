@@ -5,7 +5,7 @@ import ArrowIcon from "../../../../../assets/icons/arrowRight1.svg"
 import WPost from '../../../../components/WPost'
 import AnimatedTab from '../AnimatedTab';
 import responsivenessUtility from "../../../../helpers/responsivenessUtility" 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Modal } from 'react-native-paper'
 const window = Dimensions.get("window");
 
@@ -118,8 +118,10 @@ const styles = StyleSheet.create({
 
 
 
-export default function HomeTab({ navigation }) {
-
+export default function HomeTab({ navigation, setNav }) {
+    useEffect(()=>{
+        setNav( navigation );
+    }, [navigation])
     const samplePostList = [ "test", "Test2", "Test2", "Test2", "Test2", "Test2", "Test2", "Test2", "Test2", "Test2", "Test2" ]
     const minCols = 1;
     // alert(  );

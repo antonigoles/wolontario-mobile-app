@@ -1,11 +1,11 @@
-import { View, Text, StyleSheet } from "react-native"
+import { View, Text, StyleSheet, Pressable } from "react-native"
 import StyleStatics from "../../StyleStatics"
 import MenuIcon from "../../../assets/icons/menu.svg"
 import BackArrowIcon from "../../../assets/icons/backArrow.svg"
 import WUserAvatar from "../../components/WUserAvatar"
 
 
-export default function TabHeader({ title, homePage=true }) {
+export default function TabHeader({ navigation, title, homePage=true }) {
     const iconOptions = {
         fill: StyleStatics.darkText,
         width: 30,
@@ -13,6 +13,9 @@ export default function TabHeader({ title, homePage=true }) {
         preserveAspectRatio: "xMinYMin slice", 
         viewBox: "0 0 50 50",
     }
+
+    // alert(JSON.stringify(navigation))
+
     return (
         <View style={styles.view}>
             <View style={styles.container}>
@@ -21,9 +24,9 @@ export default function TabHeader({ title, homePage=true }) {
                     <MenuIcon { ...iconOptions } />
                 </View> 
                 :
-                <View style={{...styles.squareButton ,...styles.settingsButton}}>
+                <Pressable onPress={ navigation ? navigation.goBack : (()=>{}) } style={{...styles.squareButton ,...styles.settingsButton}}>
                     <BackArrowIcon style={{transform: [{ scaleX: -1 }]}} { ...iconOptions } />
-                </View>
+                </Pressable>
                 }     
                 <Text style={styles.headerTitle}>
                     {title}
