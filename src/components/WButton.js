@@ -28,10 +28,11 @@ export default function WButton({ label, onClick, containerStyle, disabled=false
       onPressOut={() => { if ( !disabled ) setPressedIn(false) }} 
       onPress={ disabled ? (()=>{}) : onClick } 
       style={ 
-        { ...containerStyle, 
+        { 
           ...style.view, 
           ...{ backgroundColor: (disabled ? StyleStatics.disabled : StyleStatics.primary) },
           ...{ opacity: pressedIn ? 0.9 : 1 }, 
+          ...containerStyle, 
         }
       }>
         <Text style={style.label}>{label}</Text>

@@ -28,6 +28,7 @@ const style = StyleSheet.create({
     height: 56,
     borderRadius: 12,
     fontSize: 14,
+    fontFamily: 'Poppins',
   },
   showButton: {
     height: 56,
@@ -51,6 +52,8 @@ export default function WTextForm({
     onUpdate,  
     setVal,
     val,
+    multiline,
+    startNumberOfLines,
     additionalInputParams={}
   }) {
   // if ( !val ) {
@@ -62,15 +65,21 @@ export default function WTextForm({
   let halfInputWidth = isSecure ? 140-56 : 140;
 
   return (
-    <View style={ {...containerStyle, ...( isHalfSize ? { width: 140 } : { width: 305 } ) }}>
+    <View style={ {
+      ...containerStyle, 
+      ...( isHalfSize ? { width: 140 } : { width: 305 } ), 
+    }}
+      >
       { label ? <Text style={style.label}>{label}</Text> : "" }
       <View style={style.inputGroup}>
         <TextInput 
-          
+          // multiline={multiline}
+          // numberOfLines={startNumberOfLines}
           style={ { 
             ...style.textInput, 
             ...( isHalfSize ? { width: halfInputWidth } : { width: inputWidth } ),
-            ...( isSecure ? { borderTopRightRadius: 0, borderBottomRightRadius: 0 } : {}  )
+            ...( isSecure ? { borderTopRightRadius: 0, borderBottomRightRadius: 0 } : {}  ),
+            ...{ height: (startNumberOfLines ? startNumberOfLines : 1) * 56 }
           }}
           placeholder={placeholder}
           placeholderTextColor={StyleStatics.placeholderText}

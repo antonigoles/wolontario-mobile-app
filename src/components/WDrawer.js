@@ -8,11 +8,13 @@ import Animated, { Easing, withTiming, useSharedValue, useAnimatedStyle } from '
 
 export default function WDrawer(props) {
     const [ open, setOpen ] = useState(false);
+    const [ pressed, setPressed ] = useState(false);
     const slideProgress = useSharedValue(0);
 
     const styles = StyleSheet.create({
         view: {
             overflow: 'hidden',
+            display: 'flex',
         },
         labelbox: {
             width: "100%",
@@ -72,7 +74,12 @@ export default function WDrawer(props) {
 
     return (
         <View style={{ ...props.externalStyle, ...styles.view }} > 
-            <Pressable onPress={ () => { setOpen(!open) } } style={ {...styles.labelbox, } }>
+            <Pressable 
+                onPress={ () => { setOpen(!open);  } } 
+                onPressIn={ () => setPressed(true) }
+                onPressOut={ () => setPressed(false) }
+                style={ {...styles.labelbox, } }
+            >
                 <Text style={styles.label}>{props.label}</Text>
                 <View style={styles.buttons}>
                     { props.editable ? 
@@ -86,7 +93,11 @@ export default function WDrawer(props) {
                 </View>
             </Pressable>
             <Animated.View 
-                style={[ animatedStyles ]}>
+                style={[ animatedStyles, {
+                    display: 'flex',
+                    alignItems: 'center',
+                    width: "100%",
+                } ]}>
                 { props.children }
             </Animated.View>
         </View>

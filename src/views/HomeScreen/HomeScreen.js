@@ -14,6 +14,8 @@ import PersonIcon from '../../../assets/icons/person.svg'
 import HomeIcon from '../../../assets/icons/home.svg'
 import StyleStatics from '../../StyleStatics';
 import TabHeader from './TabHeader';
+import Skills from './Tabs/ProfileTab/Skills';
+import SkillEdit from './Tabs/ProfileTab/SkillEdit';
 
 
 
@@ -24,6 +26,8 @@ const screenNameTranslations = {
 	"Group": "Wolontariat",
 	"Profile": "Mój profil",
 	"Notifications": "Powiadomienia",
+	"Skills": "Umiejętności",
+	"SkillEdit": "Edytuj lub Dodaj"
 }
 
 export default function HomeScreen({ navigation }) {
@@ -105,13 +109,25 @@ export default function HomeScreen({ navigation }) {
 
 	return (
 		<NavigationContainer independent={true}>
-			<Tab.Navigator  {  ...bottomNavigatorConfigs } >
+			<Tab.Navigator backBehavior="history"  {  ...bottomNavigatorConfigs } >
 				<Tab.Screen name="Home">
 					{ props => <HomeTab {...props} setNav={setNav} />}	
 				</Tab.Screen>
 				<Tab.Screen name="Group" component={GroupTab}  />
 				<Tab.Screen name="Notifications" component={NotificationTab}  />
 				<Tab.Screen name="Profile" component={ProfileTab}  />
+				<Tab.Screen name="Skills" component={Skills} 
+					options={{
+						tabBarButton: () => null,
+						tabBarStyle: { display: "none" },
+					}} 
+				/>
+				<Tab.Screen name="SkillEdit" component={SkillEdit} 
+					options={{
+						tabBarButton: () => null,
+						tabBarStyle: { display: "none" },
+					}} 
+				/>
 			</Tab.Navigator>
     	</NavigationContainer>
 	);
