@@ -19,13 +19,13 @@ const style = StyleSheet.create({
   inputGroup: {
     display: 'flex',
     flexDirection: 'row',
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
 
   textInput: {
     backgroundColor: StyleStatics.inputBlock,
     padding: 15,
-    height: 56,
+    // height: 56,
     borderRadius: 12,
     fontSize: 14,
     fontFamily: 'Poppins',
@@ -47,13 +47,13 @@ export default function WTextForm({
     label, 
     placeholder, 
     isSecure=false, 
+    required=true,
     containerStyle, 
+    inputStyle,
     isHalfSize=false, 
     onUpdate,  
     setVal,
     val,
-    multiline,
-    startNumberOfLines,
     additionalInputParams={}
   }) {
   // if ( !val ) {
@@ -70,16 +70,18 @@ export default function WTextForm({
       ...( isHalfSize ? { width: 140 } : { width: 305 } ), 
     }}
       >
-      { label ? <Text style={style.label}>{label}</Text> : "" }
+      { label ? <Text style={style.label}>
+        {label}
+        { required ? <Text style={{color: StyleStatics.error}}>*</Text> : ''}
+        </Text> : "" }
       <View style={style.inputGroup}>
         <TextInput 
-          // multiline={multiline}
-          // numberOfLines={startNumberOfLines}
+          // maxHeight={(numberOfLines ? numberOfLines : 1) * 56}
           style={ { 
             ...style.textInput, 
             ...( isHalfSize ? { width: halfInputWidth } : { width: inputWidth } ),
             ...( isSecure ? { borderTopRightRadius: 0, borderBottomRightRadius: 0 } : {}  ),
-            ...{ height: (startNumberOfLines ? startNumberOfLines : 1) * 56 }
+            ...inputStyle
           }}
           placeholder={placeholder}
           placeholderTextColor={StyleStatics.placeholderText}

@@ -33,7 +33,7 @@ const style = StyleSheet.create({
   }
 })
 
-export default function WCheckbox({ label, containerStyle, isChecked=false, onChange }) {
+export default function WCheckbox({ label, onRight=false, containerStyle, isChecked=false, onChange }) {
     const [ checked, setChecked ] = useState( isChecked );
 
     return (
@@ -41,6 +41,7 @@ export default function WCheckbox({ label, containerStyle, isChecked=false, onCh
             setChecked( !checked );
             if ( onChange ) onChange( !checked );
         }} style={ { ...containerStyle, ...style.view } }>
+            { onRight ? <Text style={style.label}>{label}</Text> : ''}
             <View style={
                 { 
                     ...( checked ? { backgroundColor: StyleStatics.primary } : { backgroundColor: StyleStatics.disabled }) ,
@@ -54,7 +55,7 @@ export default function WCheckbox({ label, containerStyle, isChecked=false, onCh
                     fill={style.markIcon.color} 
                 /> : ""}
             </View>
-            <Text style={style.label}>{label}</Text>
+            { onRight ? '' : <Text style={style.label}>{label}</Text> }
         </Pressable  >
     );
 }

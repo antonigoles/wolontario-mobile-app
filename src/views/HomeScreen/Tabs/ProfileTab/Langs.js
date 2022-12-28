@@ -4,10 +4,12 @@ import users from '../../../../api/users';
 import StyleStatics from '../../../../StyleStatics';
 import PlusIcon from '../../../../../assets/icons/plus.svg'
 import WLoadingAnimation from "../../../../components/WLoadingAnimation"
-import skillLevels from '../../../../helpers/skillLevels';
+import language from '../../../../helpers/language';
+import CountryFlag from "react-native-country-flag";
 
-export default function EditSkills({ navigation }) {
-    const [ skills, setSkills ] = useState([])
+
+export default function Langs({ navigation }) {
+    const [ langs, setLangs ] = useState([])
 
     const styles = StyleSheet.create({
         view: {
@@ -22,18 +24,17 @@ export default function EditSkills({ navigation }) {
             borderRadius: 10,
         },
     
-        listTitle: {
+        listTitleLang: {
             fontFamily: 'Poppins-SemiBold',
             color: StyleStatics.darkText,
             fontSize: 16,
             display: 'flex',
             flexDirection: 'row',
             alignItems: 'center',
-            width: "100%",
-            maxWidth: "100%",
+            width: "80%",
             flxe: 1,
             flexWrap: 'nowrap',
-        }, 
+        },
     
         listTitleText: {
             fontFamily: 'Poppins-SemiBold',
@@ -50,80 +51,53 @@ export default function EditSkills({ navigation }) {
             fontWeight: 'bold',
         },
     
-        listHeader: {
+        listHeaderLang: {
             display: 'flex',
-            flexDirection: 'column',
-            justifyContent: 'center',
+            flexDirection: 'row',
+            justifyContent: 'space-between',
             fontSize: 16,
             paddingLeft: 10,
             paddingRight: 10,
             height: 80,
-            alignItems: 'flex-start',
-        },
-    
-        listDescription: {
-            marginTop: -10,
-            fontSize: 12,
-            padding: 14,
-            paddingTop: 15,
-            textAlign: 'left',
-            fontFamily: 'Poppins-Medium',
-            color: StyleStatics.lightText,
-            borderTopColor: StyleStatics.darkText,
-            borderTopWidth: 0.2,
+            alignItems: 'center',
         },
     })
 
     useEffect(() => {
-        const loadSkills = async () => {
+        const loadLangs = async () => {
             try {
-                const result = await users.fetchSkills()
-                setSkills(result)
+                const result = await users.fetchLangs()
+                setLangs(result)
             } catch(err) {
                 // alert(err);
             }
         };
-        loadSkills();
+        loadLangs();
     },[])
     return (
         <View style={styles.view}>
             <ScrollView style={{ width: "100%", height: "85%"}} contentContainerStyle={{ flexGrow: 1, alignItems: 'center' }}>
-                { skills ? 
-                    skills.map( (el,idx) => 
-                        <Pressable 
-                            onPress={ () => navigation.navigate('SkillEdit', { 
-                                skillIndex: idx,
-                                skills: skills,
-                                skillData: { 
-                                    name: el.name,
-                                    description: el.description,
-                                    level: el.level
-                                } 
-                            }) }
-                            key={idx} 
-                            style={styles.listElement}
-                        >
-                            <View style={styles.listHeader}>
-                                <Text numberOfLines={1} style={styles.listTitle}> {el.name} </Text>
+                { langs ? 
+                    langs.map( (el,idx) => 
+                        <View key={idx} style={styles.listElement}>
+                            <View style={styles.listHeaderLang}>
+                                <View style={styles.listTitleLang}> 
+                                    <CountryFlag style={styles.listTitleFlag} isoCode={ language.normalizeCodeForFlag(el.code) } size={32} />
+                                    <Text style={styles.listTitleText}>{ language.codeToFull( el.code ) } </Text>
+                                </View>
                                 <Text style={styles.listSubtitle}> {el.level} </Text>
                             </View>
-                            { el.description.length > 0 ? 
-                                <Text style={styles.listDescription}> {el.description} </Text> 
-                            : ''}
-                        </Pressable> 
+                        </View>
                     )
                 : <WLoadingAnimation /> }
             </ScrollView>
             <Pressable 
-                onPress={ () => skills ? navigation.navigate('SkillEdit', { 
-                    skillIndex: skills.length, 
-                    skills: skills,
-                    skillData: { 
-                        name: "",
-                        description: "",
-                        level: skillLevels.SKILL_LEVELS[0]
-                    } 
-                }) : '' }
+                onPress={()=>{
+                    navigation.navigate("LangEdit", {
+                        creatingNew: true,
+                        lastScreen: 'langs',
+                    })
+                }}
                 style={{
                     width: "100%",
                     height: "15%",

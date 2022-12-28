@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { View, Text, Alert, StyleSheet  } from 'react-native';
 import auth from '../../api/auth'
-import { NavigationContainer } from '@react-navigation/native';
+import { NavigationContainer, DefaultTheme } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import HomeTab from './Tabs/HomeTab/HomeTab';
 import ProfileTab from './Tabs/ProfileTab/ProfileTab';
@@ -16,6 +16,9 @@ import StyleStatics from '../../StyleStatics';
 import TabHeader from './TabHeader';
 import Skills from './Tabs/ProfileTab/Skills';
 import SkillEdit from './Tabs/ProfileTab/SkillEdit';
+import WChoiceList from '../../components/WChoiceList';
+import Langs from './Tabs/ProfileTab/Langs';
+import LangEdit from './Tabs/ProfileTab/LangEdit';
 
 
 
@@ -27,7 +30,18 @@ const screenNameTranslations = {
 	"Profile": "Mój profil",
 	"Notifications": "Powiadomienia",
 	"Skills": "Umiejętności",
-	"SkillEdit": "Edytuj lub Dodaj"
+	"SkillEdit": "Edytuj lub Dodaj",
+	"WChoiceList": "Wybierz",
+	"Langs": "Języki",
+	"LangEdit": "Edytuj lub Dodaj"
+}
+
+const MainTheme = {
+	...DefaultTheme,
+	colors: {
+		...DefaultTheme.colors,
+		background: StyleStatics.background,
+	}
 }
 
 export default function HomeScreen({ navigation }) {
@@ -106,9 +120,18 @@ export default function HomeScreen({ navigation }) {
 		}),		
 	};
 
+	const hiddenTabOptions = {
+		tabBarButton: () => null,
+		tabBarStyle: { display: "none" },
+	}
+
+	const refreshOnEnter = {
+		unmountOnBlur: true,
+	}
+
 
 	return (
-		<NavigationContainer independent={true}>
+		<NavigationContainer theme={MainTheme} independent={true}>
 			<Tab.Navigator backBehavior="history"  {  ...bottomNavigatorConfigs } >
 				<Tab.Screen name="Home">
 					{ props => <HomeTab {...props} setNav={setNav} />}	
@@ -116,18 +139,11 @@ export default function HomeScreen({ navigation }) {
 				<Tab.Screen name="Group" component={GroupTab}  />
 				<Tab.Screen name="Notifications" component={NotificationTab}  />
 				<Tab.Screen name="Profile" component={ProfileTab}  />
-				<Tab.Screen name="Skills" component={Skills} 
-					options={{
-						tabBarButton: () => null,
-						tabBarStyle: { display: "none" },
-					}} 
-				/>
-				<Tab.Screen name="SkillEdit" component={SkillEdit} 
-					options={{
-						tabBarButton: () => null,
-						tabBarStyle: { display: "none" },
-					}} 
-				/>
+				<Tab.Screen name="Skills" component={Skills} options={{...hiddenTabOptions, ...refreshOnEnter}} />
+				<Tab.Screen name="SkillEdit" component={SkillEdit} options={{...hiddenTabOptions }} />
+				<Tab.Screen name="Langs" component={Langs} options={{...hiddenTabOptions }} />
+				<Tab.Screen name="LangEdit" component={LangEdit} options={{...hiddenTabOptions }} />
+				<Tab.Screen name="WChoiceList" component={WChoiceList} options={{...hiddenTabOptions, ...refreshOnEnter}} />
 			</Tab.Navigator>
     	</NavigationContainer>
 	);

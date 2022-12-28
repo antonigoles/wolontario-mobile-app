@@ -102,10 +102,23 @@ const styles = StyleSheet.create({
         display: 'flex',
         flexDirection: 'row',
         alignItems: 'center',
-        maxWidth: "80%",
+        width: "100%",
+        maxWidth: "100%",
         flxe: 1,
         flexWrap: 'nowrap',
     }, 
+
+    listTitleLang: {
+        fontFamily: 'Poppins-SemiBold',
+        color: StyleStatics.darkText,
+        fontSize: 16,
+        display: 'flex',
+        flexDirection: 'row',
+        alignItems: 'center',
+        width: "80%",
+        flxe: 1,
+        flexWrap: 'nowrap',
+    },
 
     listTitleText: {
         fontFamily: 'Poppins-SemiBold',
@@ -124,6 +137,17 @@ const styles = StyleSheet.create({
 
     listHeader: {
         display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        fontSize: 16,
+        paddingLeft: 10,
+        paddingRight: 10,
+        height: 80,
+        alignItems: 'flex-start',
+    },
+
+    listHeaderLang: {
+        display: 'flex',
         flexDirection: 'row',
         justifyContent: 'space-between',
         fontSize: 16,
@@ -137,10 +161,12 @@ const styles = StyleSheet.create({
         marginTop: -10,
         fontSize: 12,
         padding: 14,
-        paddingTop: 0,
+        paddingTop: 15,
         textAlign: 'left',
         fontFamily: 'Poppins-Medium',
         color: StyleStatics.lightText,
+        borderTopColor: StyleStatics.darkText,
+        borderTopWidth: 0.2,
     },
 
     editStats: {
@@ -166,28 +192,43 @@ export default function ProfileTab({navigation, userid}) {
     }
 
     const [ userData, setUserData ] = useState({
-        name: "Arthur",
-        surname: "Dorrance",
-        avatarUrl: `${APICONFIG.API_URL}/user/avatar/639c5c3084e98a011c24e8c6`,
-        aboutme: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean sed ligula vitae lorem lacinia blandit. Nullam sed molestie nisl, eu semper magna. Vivamus risus enim, pellentesque a consectetur iaculis, viverra vitae erat. Nullam ut mi mattis, bibendum  "
+        name: "...",
+        surname: "...",
+        avatarUrl: `../../../../../assets/emptyAvatar.webp`,
+        aboutme: ""
     })
 
+    const [ userSkills, setUserSkills ] = useState(null) 
+    const [ userLanguages, setUserLanguages ] = useState(null) 
+
     useEffect(() => {
-        const loadUser = async () => {
+        const reloadUser = async () => {
             let id=userid;
             if ( !userid ) {
                 id = (await session.get()).data.id 
             }  
             const result = await users.fetchProfile( id )
             result['avatarUrl'] = `${APICONFIG.API_URL}/user/avatar/${id}`
-            result['languages'] = result['languages'] ? result['languages'] : []
+            // result['languages'] = result['languages'] ? result['languages'] : []
             // result['languages'] = [ { code: 'pl', level: 'NATIVE'}, { code: 'en', level: 'B1' }, { code: 'fr', level: 'A2' }]
-            setAboutMe( result['aboutme'] )
-            setUserData(result)
+            if ( result['aboutme'] != aboutMe ) 
+                setAboutMe( result['aboutme'] )
+            if ( result['name'] != userData['name'] || 
+            result['surname'] != userData['surname'] || 
+            result['avatarUrl'] != userData['avatarUrl'] ) {
+                setUserData(result)
+            }   
+            if ( JSON.stringify(result['languages']) != JSON.stringify(userLanguages) )
+                setUserLanguages(result['languages'])
+            if ( JSON.stringify(result['skills']) != JSON.stringify(userSkills) )
+                setUserSkills(result['skills'])
+
         };
-        loadUser();
-        
-    },[userid])
+        const unsubscribe = navigation.addListener('focus', () => {
+            reloadUser();
+        })
+        return unsubscribe;
+    },[navigation])
 
     const updateAboutMe = async ( data ) => {
         try {
@@ -250,11 +291,16 @@ export default function ProfileTab({navigation, userid}) {
                             {/* <Text style={styles.editStats}>{aboutMeLinesCount-6} / 6 Linijek</Text> */}
                         </View>
                     </WDrawer>
-                    <WDrawer editable={ isOwner } maxHeight={ userData.languages ? Math.max(userData.languages.length, 1) * 100 : 160  } externalStyle={styles.aboutmeDrawer} label="Języki" >
-                        { userData.languages ? userData.languages.length > 0 ? userData.languages.map( (el,idx) => 
+                    {/* <WDrawer 
+                        onEdit={ () => navigation.navigate("Langs") }
+                        editable={ isOwner } 
+                        maxHeight={ userLanguages ? Math.max(userLanguages.length, 1) * 100 : 160  } 
+                        externalStyle={styles.aboutmeDrawer} 
+                        label="Języki" >
+                        { (userLanguages && userLanguages.length > 0) ? userLanguages.map( (el,idx) => 
                             <View key={idx} style={styles.listElement}>
-                                <View style={styles.listHeader}>
-                                    <View style={styles.listTitle}> 
+                                <View style={styles.listHeaderLang}>
+                                    <View style={styles.listTitleLang}> 
                                         <CountryFlag style={styles.listTitleFlag} isoCode={ language.normalizeCodeForFlag(el.code) } size={32} />
                                         <Text style={styles.listTitleText}>{ language.codeToFull( el.code ) } </Text>
                                     </View>
@@ -281,30 +327,45 @@ export default function ProfileTab({navigation, userid}) {
                                 Zmień to!
                             </Text>
                         </Text>  
-                        : ''}
-                    </WDrawer>
+                        }
+                    </WDrawer> */}
                     <WDrawer 
                         onEdit={ () => navigation.navigate("Skills") } 
                         editable={ isOwner } 
-                        maxHeight={ userData.skills ? Math.max(userData.skills.length, 1) * 200 : 100 } 
+                        maxHeight={ userSkills ? Math.max(userSkills.length, 1) * 400 : 100 } 
                         externalStyle={styles.aboutmeDrawer} 
                         label="Umiejętności" >
-                        { userData.skills ? userData.skills.length > 0 ? userData.skills.map( (el,idx) => 
+                        { (userSkills && userSkills.length > 0 )? userSkills.map( (el,idx) => 
                             <View key={idx} style={styles.listElement}>
                                 <View style={styles.listHeader}>
                                     <Text numberOfLines={1} style={styles.listTitle}> {el.name} </Text>
-                                    <Text style={styles.listSubtitle}> "{el.level}" </Text>
+                                    <Text style={styles.listSubtitle}> {el.level} </Text>
                                 </View>
                                 { el.description.length > 0 ? 
                                     <Text style={styles.listDescription}> {el.description} </Text> 
                                 : ''}
                             </View>
                         ) : 
-                        <Text>
-                            Nie ma tutaj jeszcze nic...
-                            <Text onPress={ () => navigation.navigate("Skills") }>Zmień to!</Text>
-                        </Text> 
-                        :''}
+                        <Text style={{
+                            color: StyleStatics.darkText,
+                            fontFamily: 'Poppins',
+                            textAlign: 'center',
+                            fontSize: 16,
+                            marginTop: 10,
+                        }}>
+                            Nie ma tutaj jeszcze nic... { '\n' }
+                            <Text 
+                            style={{
+                                color: StyleStatics.primary,
+                                fontFamily: 'Poppins-Bold',
+                                textAlign: 'center',
+                                fontSize: 16,
+                            }}
+                            onPress={ () => navigation.navigate("Skills") }>
+                                Zmień to!
+                            </Text>
+                        </Text>
+                        }
                     </WDrawer>
                 </ScrollView>
             </View>

@@ -65,12 +65,13 @@ export default function WDrawer(props) {
 
     useEffect(()=>{
         slideProgress.value = withTiming( open ? props.maxHeight : 0, 
-        {
-            duration: 300,
-            easing: Easing.out(Easing.exp)
-        }  
+            {
+                duration: 300,
+                easing: Easing.out(Easing.exp)
+            }  
         );
     },[open])
+
 
     return (
         <View style={{ ...props.externalStyle, ...styles.view }} > 
