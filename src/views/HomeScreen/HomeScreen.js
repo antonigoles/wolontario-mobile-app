@@ -19,7 +19,7 @@ import SkillEdit from './Tabs/ProfileTab/SkillEdit';
 import WChoiceList from '../../components/WChoiceList';
 import Langs from './Tabs/ProfileTab/Langs';
 import LangEdit from './Tabs/ProfileTab/LangEdit';
-
+import global from '../../helpers/global';
 
 
 const Tab = createBottomTabNavigator();
@@ -47,8 +47,10 @@ const MainTheme = {
 export default function HomeScreen({ navigation }) {
 	// load data, if session is dead, navigate to login screen
 	const [state, setState] = useState([]);
-	const [ navigatorVisibility, setNavigatorVisibility ] = useState(true);
+	const [ navigatorVisibility, setNavigatorVisibility ] = useState(true)
 	const [ nav, setNav ] = useState(null);
+
+	global.mainNavigation = navigation;
 
 	useEffect(()=>{
 		// WE DONT'T WANT TO QUIT THIS
@@ -109,7 +111,9 @@ export default function HomeScreen({ navigation }) {
 				<TabHeader 
 				navigation={nav}
 				homePage={route.name=="Home"} 
-				title={screenNameTranslations[route.name]} 
+				title={
+					route.params ? (route.params.headerTitleOverwrite ? route.params.headerTitleOverwrite : screenNameTranslations[route.name]) 
+					: screenNameTranslations[route.name] } 
 				/>
 			),
 
@@ -141,7 +145,7 @@ export default function HomeScreen({ navigation }) {
 				<Tab.Screen name="Profile" component={ProfileTab}  />
 				<Tab.Screen name="Skills" component={Skills} options={{...hiddenTabOptions, ...refreshOnEnter}} />
 				<Tab.Screen name="SkillEdit" component={SkillEdit} options={{...hiddenTabOptions }} />
-				<Tab.Screen name="Langs" component={Langs} options={{...hiddenTabOptions }} />
+				<Tab.Screen name="Langs" component={Langs} options={{...hiddenTabOptions, ...refreshOnEnter }} />
 				<Tab.Screen name="LangEdit" component={LangEdit} options={{...hiddenTabOptions }} />
 				<Tab.Screen name="WChoiceList" component={WChoiceList} options={{...hiddenTabOptions, ...refreshOnEnter}} />
 			</Tab.Navigator>

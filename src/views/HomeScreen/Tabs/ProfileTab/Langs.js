@@ -6,7 +6,8 @@ import PlusIcon from '../../../../../assets/icons/plus.svg'
 import WLoadingAnimation from "../../../../components/WLoadingAnimation"
 import language from '../../../../helpers/language';
 import CountryFlag from "react-native-country-flag";
-
+import global from '../../../../helpers/global';
+import { comBusMessage } from '../../../../helpers/comBus'
 
 export default function Langs({ navigation }) {
     const [ langs, setLangs ] = useState([])
@@ -79,23 +80,58 @@ export default function Langs({ navigation }) {
             <ScrollView style={{ width: "100%", height: "85%"}} contentContainerStyle={{ flexGrow: 1, alignItems: 'center' }}>
                 { langs ? 
                     langs.map( (el,idx) => 
-                        <View key={idx} style={styles.listElement}>
+                        <Pressable 
+                            key={idx} 
+                            style={styles.listElement}
+                            onPress={()=>{
+                                global.comBus.pushMessage( 
+                                    new comBusMessage(
+                                        "Langs",
+                                        "LangEdit",
+                                        {
+                                            code: language.codeToIndex( el.code ),
+                                            level: language.levelToIndex( el.level ),
+                                            langIndex: idx,
+                                        }
+                                    )
+                                )
+                                navigation.navigate("LangEdit", {
+                                    creatingNew: true,
+                                    lastScreen: 'langs',
+                                    headerTitleOverwrite: "Dodaj",
+                                    langs: langs,
+                                })
+                            }}
+                        >
                             <View style={styles.listHeaderLang}>
                                 <View style={styles.listTitleLang}> 
-                                    <CountryFlag style={styles.listTitleFlag} isoCode={ language.normalizeCodeForFlag(el.code) } size={32} />
+                                    {/* <CountryFlag style={styles.listTitleFlag} isoCode={ language.langToFlagCode(el.code) } size={32} /> */}
                                     <Text style={styles.listTitleText}>{ language.codeToFull( el.code ) } </Text>
                                 </View>
                                 <Text style={styles.listSubtitle}> {el.level} </Text>
                             </View>
-                        </View>
+                        </Pressable>
                     )
                 : <WLoadingAnimation /> }
             </ScrollView>
             <Pressable 
                 onPress={()=>{
+                    global.comBus.pushMessage( 
+                        new comBusMessage(
+                            "Langs",
+                            "LangEdit",
+                            {
+                                code: 0,
+                                level: 0,
+                                langIndex: langs.length,
+                            }
+                        )
+                    )
                     navigation.navigate("LangEdit", {
                         creatingNew: true,
                         lastScreen: 'langs',
+                        headerTitleOverwrite: "Dodaj",
+                        langs: langs,
                     })
                 }}
                 style={{

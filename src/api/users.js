@@ -173,5 +173,28 @@ export default class {
         }  
     }
 
+    static async uploadAvatar( data ) {
+        try {
+            let localUri = data.assets[0].uri;
+            let filename = localUri.split('/').pop();
+            let match = /\.(\w+)$/.exec(filename);
+            let type = match ? `image/${match[1]}` : `image`;
+
+
+            let formData = new FormData()
+            formData.append('avatar', { uri: localUri, name: filename, type })
+            const token = (await session.get()).token
+            return await fetch( `${config.API_URL}/user/upload-avatar/`, {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'content-type': 'multipart/form-data',
+                }
+            } ).then( data => data.json() )
+        } catch ( err ) {
+            throw err;
+        }
+    }
 
 }

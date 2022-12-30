@@ -93,6 +93,7 @@ export default function EditSkills({ navigation }) {
                         <Pressable 
                             onPress={ () => navigation.navigate('SkillEdit', { 
                                 skillIndex: idx,
+                                headerTitleOverwrite: "Edytuj",
                                 skills: skills,
                                 skillData: { 
                                     name: el.name,
@@ -116,6 +117,7 @@ export default function EditSkills({ navigation }) {
             </ScrollView>
             <Pressable 
                 onPress={ () => skills ? navigation.navigate('SkillEdit', { 
+                    headerTitleOverwrite: "Dodaj",
                     skillIndex: skills.length, 
                     skills: skills,
                     skillData: { 

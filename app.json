@@ -22,10 +22,14 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "infoPlist": {
+        "NSCameraUsageDescription": "Aplikacja potrzebuje dostępu do twoich zdjęć abyś mógł używać ich np. jako zdjęcie profliowe"
+      }
     },
     "android": {
       "softwareKeyboardLayoutMode": "pan",
+      "permissions": [ "CAMERA", "WRITE_EXTERNAL_STORAGE" ],
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
@@ -33,6 +37,14 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "plugins": [
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "Aplikacja potrzebuje dostępu do twoich zdjęć abyś mógł używać ich np. jako zdjęcie profliowe"
+        }
+      ]
+    ]
   }
 }

@@ -1,17 +1,19 @@
-import { View, StyleSheet, Text, ScrollView, Pressable } from 'react-native'
+import { View, StyleSheet, Text, ScrollView, Pressable, Alert } from 'react-native'
 import { useState, useEffect } from 'react';
 import users from '../../../../api/users';
 import StyleStatics from '../../../../StyleStatics';
 import CountryFlag from "react-native-country-flag";
 import language from '../../../../helpers/language';
 import WCheckbox from '../../../../components/WCheckbox';
+import global from '../../../../helpers/global';
+import { comBusMessage } from '../../../../helpers/comBus'
 
-export default function LangEdit({ navigation }) {
+export default function LangEdit({ navigation, route }) {
     const [ langCode, setLangCode ] = useState(0)
     const [ level, setLevel ] = useState(0)
+    const [ langIndex, setLangIndex ] = useState(0)
 
     const allCodes = language.getAllCodes()
-    alert(allCodes[0])
     const styles = StyleSheet.create({
         view: {
             display: 'flex',
@@ -76,9 +78,56 @@ export default function LangEdit({ navigation }) {
             // const rt = navigation.getState().routes.find( e => e.name == "LangEdit" )
             // setLangCode( oldLangCode => oldLangCode ? oldLangCode : rt.params.langCode )
             // setLevel( oldLevel => oldLevel ? oldLevel : rt.params.level )
+            const msgFromWChoiceList = global.comBus.receiveMessages("LangEdit", "WChoiceList")
+            if ( msgFromWChoiceList ) {
+                setLangCode( msgFromWChoiceList.content.choice )
+            }
+
+            const msgFromLangs = global.comBus.receiveMessages("LangEdit", "Langs")
+            if ( msgFromLangs ) {
+                setLangCode( msgFromLangs.content.code )
+                setLevel( msgFromLangs.content.level )
+                setLangIndex( msgFromLangs.content.langIndex )
+            }
         })
+        return unsubscribe
     }, [navigation])
 
+
+    const deleteLang = async () => {
+        if ( route.params.langs.length <= langIndex ) {
+            return navigation.goBack()
+        };
+        try {
+            await users.deleteLang( langIndex, route.params.langs )
+            setLangCode(0)
+            setLevel(0)
+            return navigation.goBack()
+        } catch ( err ) {
+            alert(err)
+        }
+    }
+
+    const saveLang = async () => {
+        try {
+            if ( route.params.langs.length <= langIndex  ) {
+                await users.addLang( {
+                    code: allCodes[langCode].toUpperCase(),
+                    level: language.acceptedLevels[level].code
+                }, route.params.langs )
+            } else {
+                await users.updateLang( langIndex, {
+                    code: allCodes[langCode].toUpperCase(),
+                    level: language.acceptedLevels[level].code
+                }, route.params.langs )
+            }
+            setLangCode(0)
+            setLevel(0)
+            return navigation.goBack()
+        } catch ( err ) {
+            alert(err)
+        }
+    }
 
     return (
         <View style={styles.view}>
@@ -86,14 +135,15 @@ export default function LangEdit({ navigation }) {
                 style={ { ...styles.langPick, ...styles.spacer } }
                 onPress={ () => {
                     navigation.navigate('WChoiceList', {
-                        data: skillLevels.SKILL_LEVELS,
-                        initialSelected: skillLevel,
+                        data: allCodes.map( e => `${language.codeToFull( e )}`  ),
+                        useComBus: true,
+                        initialSelected: langCode,
                         previousRoute: route.name,
                         previousState: navigation.getState()
                     })
                 }}
             >
-                <CountryFlag isoCode={ language.normalizeCodeForFlag( allCodes[langCode] ) } size={28} />
+                <CountryFlag isoCode={ "" } size={28} />
                 <Text style={ styles.langName }> { language.codeToFull( allCodes[langCode] ) } </Text>
             </Pressable>
             <View style={styles.list}> 
@@ -115,10 +165,19 @@ export default function LangEdit({ navigation }) {
                 }
             </View>
             <View style={styles.bottomContainer}>
-                <Pressable>
+                <Pressable onPress={
+                    () => { 
+                        Alert.alert("Potwierdź decyzje", "Na pewno chcesz usunąć?", [
+                            { text: "Anuluj", onPress: null, style: 'cancel' },
+                            { text: "Usuń", onPress: () => deleteLang()  }
+                        ])
+                    }
+                }>
                     <Text style={styles.bottomButton}>Usuń</Text>
                 </Pressable> 
-                <Pressable>
+                <Pressable onPress={
+                    () => { saveLang() }
+                }>
                     <Text style={styles.bottomButton}>Zapisz</Text>
                 </Pressable> 
             </View>

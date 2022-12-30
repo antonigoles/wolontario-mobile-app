@@ -1,9 +1,10 @@
-import { View, Text, StyleSheet, Pressable, ScrollView, TouchableHighlight  } from 'react-native';
+import { View, Text, StyleSheet, Pressable, ScrollView  } from 'react-native';
 import StyleStatics from '../StyleStatics';
 import React from 'react'
 import { useState  } from 'react';
 import { CommonActions, TabActions } from '@react-navigation/native'; 
-
+import global from '../helpers/global'
+import { comBusMessage } from '../helpers/comBus'
 
 
 
@@ -44,7 +45,8 @@ export default function WChoiceList(params) {
     })
     
     const data = params.route.params.data
-    const listBuilderFunction = params.route.params.listBuilderFunction
+    const useComBus = params.route.params.useComBus
+    const prebuilList = params.route.params.prebuilList
     const previousNavigationState = params.route.params.previousState
     const previousRoute = params.route.params.previousRoute
 
@@ -58,20 +60,20 @@ export default function WChoiceList(params) {
             justifyContent: 'space-between',
             // alignItems: 'center',
         }}>
-            <View>
-                { listBuilderFunction ? 
-                data.map( listBuilderFunction ) : 
-                data.map( ( el, idx ) => {
-                    return (
-                        <Pressable onPress={ () => setSelected(idx) } key={idx} style={{ 
-                            ...style.listElement, 
-                            ...( selected == idx ? style.selectedListElement : {} ) 
-                        }}>
-                            <Text style={style.listElementText}>{el}</Text>
-                        </Pressable>
-                    )
-                }) } 
-            </View>
+            <ScrollView>
+                {  prebuilList ? prebuilList  : 
+                   data.map(( el, idx ) => {
+                        return (
+                            <Pressable key={idx} onPress={ () => setSelected(idx) } style={{ 
+                                ...style.listElement, 
+                                ...( selected == idx ? style.selectedListElement : {} ) 
+                            }}>
+                                <Text style={style.listElementText}>{el}</Text>
+                            </Pressable>
+                        )
+                    })
+                }  
+            </ScrollView>
             <Pressable 
                 onPressIn={ () => setPressedIn(true) }
                 onPressOut={ () => setPressedIn(false) }
@@ -83,6 +85,18 @@ export default function WChoiceList(params) {
                     //     ...CommonActions.setParams({ user: 'Wojtek' }),
                     //     source: previousScreenRoute.key,
                     // });
+                    if ( useComBus ) {
+                        global.comBus.pushMessage(
+                            new comBusMessage(
+                                "WChoiceList",
+                                previousRoute,
+                                {
+                                    choice: selected,
+                                }
+                            )
+                        )
+                    }
+
                     previousNavigationState.routes = previousNavigationState.routes.map(
                         route => { 
                             if ( route.name == previousRoute ) 

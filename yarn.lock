@@ -4804,6 +4804,19 @@
   dependencies:
     "fontfaceobserver" "^2.1.0"
 
+"expo-image-loader@~4.0.0":
+  "integrity" "sha512-hVMhXagsO1cSng5s70IEjuJAuHy2hX/inu5MM3T0ecJMf7L/7detKf22molQBRymerbk6Tzu+20h11eU0n/3jQ=="
+  "resolved" "https://registry.npmjs.org/expo-image-loader/-/expo-image-loader-4.0.0.tgz"
+  "version" "4.0.0"
+
+"expo-image-picker@~14.0.2":
+  "integrity" "sha512-dC0efykReusbjOtcvXYagABrVuwuOFwTfEx87VNjCZejig5aIPPj14UsViSV7xEQ+wkHvVnxyirox5xIbD196w=="
+  "resolved" "https://registry.npmjs.org/expo-image-picker/-/expo-image-picker-14.0.2.tgz"
+  "version" "14.0.2"
+  dependencies:
+    "expo-image-loader" "~4.0.0"
+    "uuid" "7.0.2"
+
 "expo-keep-awake@~11.0.1":
   "integrity" "sha512-44ZjgLE4lnce2d40Pv8xsjMVc6R5GvgHOwZfkLYtGmgYG9TYrEJeEj5UfSeweXPL3pBFhXKfFU8xpGYMaHdP0A=="
   "resolved" "https://registry.npmjs.org/expo-keep-awake/-/expo-keep-awake-11.0.1.tgz"
@@ -8945,6 +8958,11 @@
   "resolved" "https://registry.npmjs.org/react-native-gradle-plugin/-/react-native-gradle-plugin-0.70.3.tgz"
   "version" "0.70.3"
 
+"react-native-image-picker@^1.1.0":
+  "integrity" "sha512-/KjHf4NNAjl6XM7FQuqvGDz1wB9sRdLf86+2yksLW/QTRR7CitX4TLCM8ZF9CX6Y0MsCTndkZia3zWE+nt/GiA=="
+  "resolved" "https://registry.npmjs.org/react-native-image-picker/-/react-native-image-picker-1.1.0.tgz"
+  "version" "1.1.0"
+
 "react-native-paper@^5.0.1":
   "integrity" "sha512-JY4XQktCCoDWLbZsNfUNsGSJ9Zf7HvpXfwif4aQT1igW+WTYWhWCQsAXsnisd5bMiw9uNwSQCbLkckvuI2fWBg=="
   "resolved" "https://registry.npmjs.org/react-native-paper/-/react-native-paper-5.0.1.tgz"
@@ -10838,6 +10856,11 @@
   "integrity" "sha512-+NYs2QeMWy+GWFOEm9xnn6HCDp0l7QBD7ml8zLUmJ+93Q5NF0NocErnwkTkXVFNiX3/fpC6afS8Dhb/gz7R7eg=="
   "resolved" "https://registry.npmjs.org/uuid/-/uuid-8.3.2.tgz"
   "version" "8.3.2"
+
+"uuid@7.0.2":
+  "integrity" "sha512-vy9V/+pKG+5ZTYKf+VcphF5Oc6EFiu3W8Nv3P3zIh0EqVI80ZxOzuPfe9EHjkFNvf8+xuTHVeei4Drydlx4zjw=="
+  "resolved" "https://registry.npmjs.org/uuid/-/uuid-7.0.2.tgz"
+  "version" "7.0.2"
 
 "valid-url@~1.0.9":
   "integrity" "sha512-QQDsV8OnSf5Uc30CKSwG9lnhMPe6exHtTXLRYX8uMwKENy640pU+2BgBL0LRbDh/eYRahNCS7aewCx0wf3NYVA=="
