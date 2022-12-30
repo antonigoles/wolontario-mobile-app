@@ -5,43 +5,7 @@ import { useState  } from 'react';
 import VisibilityOn from '../../assets/icons/visibilityOn.svg'
 import VisibilityOff from '../../assets/icons/visibilityOff.svg';
 
-const style = StyleSheet.create({
-  view: {
 
-  },
-  label: {
-    fontWeight: 'bold',
-    marginBottom: 10,
-    fontSize: 16,
-    width: 305,
-  },
-
-  inputGroup: {
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'center',
-  },
-
-  textInput: {
-    backgroundColor: StyleStatics.inputBlock,
-    padding: 15,
-    // height: 56,
-    borderRadius: 12,
-    fontSize: 14,
-    fontFamily: 'Poppins',
-  },
-  showButton: {
-    height: 56,
-    width: 56,
-    backgroundColor: StyleStatics.inputBlock,
-    borderTopRightRadius: 12, 
-    borderBottomRightRadius: 12,
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    alignContent: 'center',
-  }
-})
 
 export default function WTextForm({ 
     label, 
@@ -63,6 +27,48 @@ export default function WTextForm({
 
   let inputWidth = isSecure ? 305-56 : 305;
   let halfInputWidth = isSecure ? 140-56 : 140;
+
+  const style = StyleSheet.create({
+    view: {
+  
+    },
+    label: {
+      fontWeight: 'bold',
+      marginBottom: 10,
+      fontSize: 16,
+      width: 305,
+    },
+  
+    inputGroup: {
+      display: 'flex',
+      flexDirection: 'row',
+      justifyContent: 'center',
+    },
+  
+    textInput: { ...{
+      backgroundColor: StyleStatics.inputBlock,
+      padding: 15,
+
+      borderRadius: 12,
+      fontSize: 14,
+      fontFamily: 'Poppins',
+    }, ...additionalInputParams.multiline ? {
+
+    } : {
+      height: 56,
+    }},
+    showButton: {
+      height: 56,
+      width: 56,
+      backgroundColor: StyleStatics.inputBlock,
+      borderTopRightRadius: 12, 
+      borderBottomRightRadius: 12,
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      alignContent: 'center',
+    }
+  })
 
   return (
     <View style={ {

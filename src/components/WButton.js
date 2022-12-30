@@ -20,7 +20,7 @@ const style = StyleSheet.create({
   }
 })
 
-export default function WButton({ label, onClick, containerStyle, disabled=false }) {
+export default function WButton({ label, onClick, containerStyle, labelStyle, baseColor, labelColor, disabled=false }) {
   const [ pressedIn, setPressedIn ] = useState(false) 
   return (
     <Pressable 
@@ -33,9 +33,16 @@ export default function WButton({ label, onClick, containerStyle, disabled=false
           ...{ backgroundColor: (disabled ? StyleStatics.disabled : StyleStatics.primary) },
           ...{ opacity: pressedIn ? 0.9 : 1 }, 
           ...containerStyle, 
+          ...baseColor ? {  backgroundColor: baseColor } : {}
         }
       }>
-        <Text style={style.label}>{label}</Text>
+        <Text style={{
+          ...style.label, 
+          ...labelStyle,
+          ...labelColor ? { color: labelColor } : {}
+        }}>
+            {label}
+          </Text>
     </Pressable>
   );
 }

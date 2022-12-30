@@ -1,3 +1,4 @@
+import session from '../helpers/session.js';
 import config from './config.js'
 
 export default {
@@ -38,5 +39,21 @@ export default {
         let result = true;
         if ( callback ) callback( result )
         return true;
+    },
+
+    async logout() {
+        try {
+            const token = (await (session.get())).token;
+            await fetch(`${config.API_URL}/user/blacklisttoken`, {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'content-type': 'application/json'
+                },
+            })
+            await session.set( null )
+        } catch (err) {
+            throw err;
+        }
     },
 }

@@ -6,7 +6,7 @@ import CheckmarkIcon from "../../assets/icons/checkmark.svg";
 const style = StyleSheet.create({
   view: {
     width: 305,
-    height: 30,
+    // height: 30,
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'flex-start',
@@ -24,6 +24,7 @@ const style = StyleSheet.create({
   },
 
   label: {
+    fontFamily: 'Poppins',
     fontWeight: 'bold',
     color: StyleStatics.lightText,
     fontWeight: 'regular',

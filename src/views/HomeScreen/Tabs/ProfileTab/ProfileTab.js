@@ -254,7 +254,8 @@ export default function ProfileTab({navigation, userid}) {
                 setUserLanguages(result['languages'])
             if ( JSON.stringify(result['skills']) != JSON.stringify(userSkills) )
                 setUserSkills(result['skills'])
-
+            
+            navigation.setParams({ headerTitleOverwrite: isOwner ? "Mój profil" : `${result['name']} ${result['surname']}` })
         };
         const unsubscribe = navigation.addListener('focus', () => {
             reloadUser();
@@ -333,8 +334,9 @@ export default function ProfileTab({navigation, userid}) {
                 
                 <ScrollView>
                     <View  style={styles.profileHeader}>
-                        <Pressable onPress={changeAvatar}>
+                        <Pressable onPress={ isOwner ? changeAvatar : null }>
                             <WImage externalStyle={styles.avatar} url={avatarUrl} />
+                            { isOwner ?
                             <View style={styles.changeAvatar}>  
                                 <GaleryIcon 
                                     width={20} 
@@ -345,6 +347,7 @@ export default function ProfileTab({navigation, userid}) {
                                 /> 
                                 <Text style={styles.changeAvatarText}> Zmień zdjęcie </Text>
                             </View>
+                            : ''}
                         </Pressable>
                         <View style={styles.namebox}>
                             <Text style={styles.name}>{userData.name}</Text>
@@ -378,7 +381,10 @@ export default function ProfileTab({navigation, userid}) {
                             maxHeight={160} 
                             caretHidden={false}
                             numberOfLines={10}
-                            style={styles.aboutme}
+                            style={ {
+                                ...styles.aboutme, 
+                                ...{ color: isOwner ? StyleStatics.lightText : 'black' } 
+                            }}
                             maxLength={255}
                             onChangeText={ (data) => { 
                                 setAboutMe(data);
@@ -391,13 +397,13 @@ export default function ProfileTab({navigation, userid}) {
 
                             }}
 
-                            underlineColor={StyleStatics.primary}
+                            underlineColor={isOwner ? StyleStatics.primary : 'transparent'}
                             // outlineColor='transparent'
-                            activeUnderlineColor={StyleStatics.primary}
-                            cursorColor={StyleStatics.primary}
+                            activeUnderlineColor={isOwner ? StyleStatics.primary : 'transparent'}
+                            cursorColor={isOwner ? StyleStatics.primary : 'transparent'}
                             value={aboutMe}
                         />
-                        <View style={{
+                        { isOwner ? <View style={{
                             width: "80%",
                             display: 'flex',
                             flexDirection: 'row',
@@ -406,6 +412,7 @@ export default function ProfileTab({navigation, userid}) {
                             <Text style={styles.editStats}>{aboutMe.length} / 255 Znaków</Text> 
                             {/* <Text style={styles.editStats}>{aboutMeLinesCount-6} / 6 Linijek</Text> */}
                         </View>
+                        : ''}
                     </WDrawer>
                     <WDrawer 
                         onEdit={ () => navigation.navigate("Langs") }

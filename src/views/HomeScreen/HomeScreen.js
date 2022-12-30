@@ -20,7 +20,11 @@ import WChoiceList from '../../components/WChoiceList';
 import Langs from './Tabs/ProfileTab/Langs';
 import LangEdit from './Tabs/ProfileTab/LangEdit';
 import global from '../../helpers/global';
-
+import GroupRequests from './Tabs/GroupTab/GroupRequests';
+import GroupRequestsAdmin from './Tabs/GroupTab/GroupRequestsAdmin';
+import OptionsTab from './Tabs/OptionsTab/OptionsTab';
+import session from '../../helpers/session';
+import GroupRequestForm from './Tabs/GroupTab/GroupRequests/RequestForm'
 
 const Tab = createBottomTabNavigator();
 
@@ -33,7 +37,10 @@ const screenNameTranslations = {
 	"SkillEdit": "Edytuj lub Dodaj",
 	"WChoiceList": "Wybierz",
 	"Langs": "Języki",
-	"LangEdit": "Edytuj lub Dodaj"
+	"LangEdit": "Edytuj lub Dodaj",
+	"Options": "Menu",
+	"GroupRequests": "Prośby o utworzenie wolontariatu",
+	"GroupRequestForm": "Wyślij prośbę o utworzenie wolontariatu"
 }
 
 const MainTheme = {
@@ -49,6 +56,7 @@ export default function HomeScreen({ navigation }) {
 	const [state, setState] = useState([]);
 	const [ navigatorVisibility, setNavigatorVisibility ] = useState(true)
 	const [ nav, setNav ] = useState(null);
+	const [ isGlobalAdmin, setIsGlobalAdmin ] = useState(null);
 
 	global.mainNavigation = navigation;
 
@@ -59,10 +67,17 @@ export default function HomeScreen({ navigation }) {
 		})
 	}, [navigation])
 
-	useEffect(() => {
-		auth.validateCurrentSession( (result) => {
-			if ( !result ) navigation.navigate('Login')
-		})
+	useEffect( () => {
+		const loadSessionData = async () => {
+			try {
+				const sessionData = await (session.get());
+				setIsGlobalAdmin( Boolean(sessionData.data.isGlobalAdmin) );
+			} catch(err) {
+				alert(err)
+			}
+			
+		}
+		loadSessionData()
 	}, [])
 
 	
@@ -148,6 +163,13 @@ export default function HomeScreen({ navigation }) {
 				<Tab.Screen name="Langs" component={Langs} options={{...hiddenTabOptions, ...refreshOnEnter }} />
 				<Tab.Screen name="LangEdit" component={LangEdit} options={{...hiddenTabOptions }} />
 				<Tab.Screen name="WChoiceList" component={WChoiceList} options={{...hiddenTabOptions, ...refreshOnEnter}} />
+				<Tab.Screen name="Options" component={OptionsTab} options={{...hiddenTabOptions}} />
+				<Tab.Screen 
+					name="GroupRequests" 
+					component={isGlobalAdmin ? GroupRequestsAdmin : GroupRequests} 
+					options={{...hiddenTabOptions}} 
+				/>
+				<Tab.Screen name="GroupRequestForm" component={GroupRequestForm} options={{...hiddenTabOptions}} />
 			</Tab.Navigator>
     	</NavigationContainer>
 	);

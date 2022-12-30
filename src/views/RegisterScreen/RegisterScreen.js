@@ -9,6 +9,7 @@ import validateEmail from '../../helpers/validateEmail';
 import validatePassword from '../../helpers/validatePassword';
 
 import auth from '../../api/auth.js'
+import session from '../../helpers/session';
 
 export default function RegisterScreen({ navigation }) {
     const [ registerButtonDisabled, setRegisterButtonDisabled ] = useState(true);
@@ -58,7 +59,9 @@ export default function RegisterScreen({ navigation }) {
 			const data = await auth.requestRegister( JSON.parse(loginData) );
 			if ( data.error ) {
 				setError( data.error )
+                return;
 			}
+            await session.set(data)
 		} catch(err) {
 			setError(err.error)
 		}

@@ -14,6 +14,7 @@ export default {
     white: "#FFFFFF",
 
     success: "#0EAF88",
+    warning: "#ebbb1e",
     error: "#ED7878",
 
     background: "#F5F5FF",

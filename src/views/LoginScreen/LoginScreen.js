@@ -77,10 +77,10 @@ export default function LoginScreen({ navigation }) {
 				setError( data.error )
 				return;
 			} 
-			session.set( data )
+			
 			// alert( JSON.stringify(data) )
 			if ( JSON.parse(loginData)["rememberme"] ) remeberedData.set( loginData )
-			await navigation.navigate( "Home" )
+			await session.set( data )
 		} catch(err) {
 			setError(err.error)
 		}

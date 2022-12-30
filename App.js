@@ -21,8 +21,11 @@ export default function App() {
 
 	const [ comBus, setComBus ] = useState( new communicationBus() )
 	const [ popUpContent, setPopUpContent ] = useState();
+	const [ isSignedIn, setIsSignedIn ] = useState(false)
 
 	GLOBAL.comBus = comBus
+	GLOBAL.isSignedIn = isSignedIn;
+	GLOBAL.setIsSignedIn = setIsSignedIn
 
 	const [ fontsLoaded ] = useFonts({
 		'Poppins-Light': Poppins_300Light,
@@ -40,9 +43,16 @@ export default function App() {
 		<NavigationContainer style={ styles.container } >
 			<Stack.Navigator initialRouteName="Login">
 				<Stack.Group screenOptions={{ headerShown: false }}>
-					<Stack.Screen name="Login" component={LoginScreen} />
-					<Stack.Screen name="Home" component={HomeScreen} />
-					<Stack.Screen name="Register" component={RegisterScreen} />
+					{ isSignedIn ? 
+					<>
+						<Stack.Screen name="Home" component={HomeScreen} />
+					</>
+					:
+					<>
+						<Stack.Screen name="Login" component={LoginScreen} />
+						<Stack.Screen name="Register" component={RegisterScreen} />
+					</>						
+					}	
 				</Stack.Group>
 			</Stack.Navigator>
 		</NavigationContainer>

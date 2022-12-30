@@ -16,13 +16,64 @@ export default function TabHeader({ navigation, title, homePage=true }) {
 
     // alert(JSON.stringify(navigation))
 
+    const styles = StyleSheet.create({
+        view: {
+            fontFamily: 'Poppins',
+            display: 'flex',
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            height: "100%",
+            width: "100%"
+        },
+    
+        container: {
+            display: 'flex',
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'flex-start',
+        },
+    
+        squareButton: {
+            width: 50,
+            height: 50,
+            backgroundColor: StyleStatics.inputBlock,
+            borderRadius: 16,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+        },
+    
+        backButton: {
+    
+        },
+        settingsButton: {
+            
+        },
+        headerTitle: {
+            // width: "100%",
+            display: 'flex',
+            alignItems: 'flex-start',
+            flexShrink: 1,
+            flexWrap: 'wrap',
+            fontFamily: 'Poppins-SemiBold',
+            // fontWeight: 'semi-bold',
+            fontSize: Math.min( 24, Math.floor((40 / title.length) * 20)),
+            textAlign: 'left',
+            color: StyleStatics.darkText,
+            justifySelf: "flex-start",
+            marginLeft: 15,
+        }
+    
+    })
+
     return (
         <View style={styles.view}>
             <View style={styles.container}>
                 { homePage ? 
-                <View style={{...styles.squareButton, ...styles.backButton}}>
+                <Pressable onPress={ navigation ? () => navigation.navigate('Options') : null } style={{...styles.squareButton, ...styles.backButton}}>
                     <MenuIcon { ...iconOptions } />
-                </View> 
+                </Pressable> 
                 :
                 <Pressable onPress={ navigation ? navigation.goBack : (()=>{}) } style={{...styles.squareButton ,...styles.settingsButton}}>
                     <BackArrowIcon style={{transform: [{ scaleX: -1 }]}} { ...iconOptions } />
@@ -37,48 +88,3 @@ export default function TabHeader({ navigation, title, homePage=true }) {
     )
 }
 
-const styles = StyleSheet.create({
-    view: {
-        fontFamily: 'Poppins',
-        display: 'flex',
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        height: "100%",
-        width: "100%"
-    },
-
-    container: {
-        display: 'flex',
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'flex-start',
-    },
-
-    squareButton: {
-        width: 50,
-        height: 50,
-        backgroundColor: StyleStatics.inputBlock,
-        borderRadius: 16,
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-
-    backButton: {
-
-    },
-    settingsButton: {
-        
-    },
-    headerTitle: {
-        fontFamily: 'Poppins-SemiBold',
-        // fontWeight: 'semi-bold',
-        fontSize: 24,
-        textAlign: 'left',
-        color: StyleStatics.darkText,
-        justifySelf: "flex-start",
-        marginLeft: 15,
-    }
-
-})

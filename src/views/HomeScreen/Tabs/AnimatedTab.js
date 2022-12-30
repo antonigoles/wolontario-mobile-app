@@ -1,14 +1,15 @@
 
 import { useEffect, useState } from 'react';
-import { Animated, Text, View } from 'react-native';
+import Animated, { useSharedValue, useAnimatedStyle } from 'react-native-reanimated'
 
 
-export default function AnimatedTab(params) {
+export default function AnimatedTab({ navigation, children }) {
+
 
     return (
         
-        <Animated.View>
-            {params.children}
+        <Animated.View >
+            {children}
         </Animated.View>
     )
 }
