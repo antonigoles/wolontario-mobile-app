@@ -167,9 +167,9 @@ export default function HomeScreen({ navigation }) {
 				<Tab.Screen 
 					name="GroupRequests" 
 					component={isGlobalAdmin ? GroupRequestsAdmin : GroupRequests} 
-					options={{...hiddenTabOptions}} 
+					options={{...hiddenTabOptions, ...refreshOnEnter}} 
 				/>
-				<Tab.Screen name="GroupRequestForm" component={GroupRequestForm} options={{...hiddenTabOptions}} />
+				<Tab.Screen name="GroupRequestForm" component={GroupRequestForm} options={{...hiddenTabOptions, ...refreshOnEnter}} />
 			</Tab.Navigator>
     	</NavigationContainer>
 	);

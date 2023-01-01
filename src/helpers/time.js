@@ -1,6 +1,7 @@
 export default {
-    prettyTimespan: ( time ) => {
-        const secondSpan = Math.floor((Date.now() - time)/1000)
+    prettyTimespan: ( time, fromNow=true ) => {
+        let startTime = fromNow ? Date.now() - time : time
+        const secondSpan = Math.floor((startTime)/1000)
         const minuteSpan = Math.floor(secondSpan/60)
         const hourSpan = Math.floor(minuteSpan/60)
         const daySpan = Math.floor(hourSpan/24)

@@ -62,8 +62,8 @@ export default function NonPending({ nonPendingRequests, tabNavigator }) {
                     ) )
                 : 
                     <View style={styles.infoBox}>
-                        <Text style={styles.infoBoxText}>Wygląda na to że jeszcze nigdy nie wysyłałej żadnej prośby</Text>
-                        <Text onPress={ () => tabNavigator.navigate("GroupRequestForm") } style={styles.infoBoxTextSend}>Wyślij prośbę</Text>
+                        <Text style={styles.infoBoxText}>Nie masz żadnych nieoczekujących próśb</Text>
+                        {/* <Text onPress={ () => tabNavigator.navigate("GroupRequestForm") } style={styles.infoBoxTextSend}>Wyślij prośbę</Text> */}
                     </View>
                 }
             </View>

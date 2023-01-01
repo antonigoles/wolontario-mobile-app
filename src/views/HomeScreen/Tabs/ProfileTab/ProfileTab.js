@@ -279,7 +279,7 @@ export default function ProfileTab({navigation, userid}) {
             })
             await users.uploadAvatar( result )
         } catch ( err ) {
-            alert(err)
+            // alert(err)
         }
         
     }
@@ -292,7 +292,7 @@ export default function ProfileTab({navigation, userid}) {
             })
             await users.uploadAvatar( result )
         } catch ( err ) {
-            alert(err)
+            throw err;
         }
         
     }
@@ -301,7 +301,7 @@ export default function ProfileTab({navigation, userid}) {
         try {
             setBrowseImagesVisibility(true)
         } catch(err) {
-            // alert(err)
+            throw err;
         }   
     }
 

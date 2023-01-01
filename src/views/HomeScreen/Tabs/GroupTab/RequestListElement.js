@@ -1,7 +1,7 @@
 import { View, Text, StyleSheet } from 'react-native'
 import StyleStatics from '../../../../StyleStatics';
 
-export default function RequestListElement({ title, org, status }) {
+export default function RequestListElement({ title, org, status, createdBy }) {
     const statusStyles = {
         status: {
             fontFamily: 'Poppins-Bold',
@@ -59,11 +59,40 @@ export default function RequestListElement({ title, org, status }) {
 
         statusBox: {
 
+        },
+
+        username: {
+            fontFamily: 'Poppins',
+            fontSize: 12,
+            
+        },
+
+        trustedTag: {
+            fontFamily: 'Poppins-Bold',
+            fontSize: 12,
+            backgroundColor: StyleStatics.success,
+            color: StyleStatics.white,
+            borderRadius: 12,
+            paddingHorizontal: 5,
+            marginRight: 5,
+            marginLeft: -5,
+        },
+
+        usernamebox: {
+            display: 'flex',
+            flexDirection: 'row',
+            alignItems: 'center',
         }
     })
     return (
         <View style={styles.view}>
             <View style={styles.textBox}>
+                <View style={styles.usernamebox}>
+                    { createdBy.trusted ? 
+                    <Text style={styles.trustedTag}> Zaufany </Text>
+                    : ''}
+                    <Text style={styles.username}>{createdBy.name} {createdBy.surname}</Text>
+                </View>
                 <Text numberOfLines={1} style={styles.name}>{title}</Text>
                 <Text numberOfLines={1} style={styles.orgName}>{org}</Text>
             </View>

@@ -36,8 +36,6 @@ export default function Pending({ }) {
             } catch ( err ) {
                 alert(err)
             }
-            
-            
         }
         loadRequests()
     },[])
@@ -48,7 +46,7 @@ export default function Pending({ }) {
                 <Text style={styles.sectionLabel}> Prośby do zweryfikowania </Text>
                 { pendingRequests.length > 0 ? 
                     pendingRequests.map( (e,idx) => (
-                        <RequestListElement key={idx} title={e.name} org={e.orgName} status={e.status}/>
+                        <RequestListElement key={idx} title={e.name} org={e.orgName} createdBy={e.createdBy} status={e.status}/>
                     ) )
                 : ''}
             </View>

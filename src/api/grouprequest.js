@@ -37,4 +37,23 @@ export default class {
             throw err;
         } 
     }
+
+    static async submitRequest( formData ) {
+        try {
+            const token = (await session.get()).token
+            return (await 
+                fetch( `${config.API_URL}/grouprequest/`,
+                    {
+                        method: 'POST',
+                        headers: {
+                            'Authorization': `Bearer ${token}`,
+                            'content-type': 'application/json'
+                        },
+                        body: JSON.stringify( formData )
+                    })
+                    .then( data => data.json() )).message
+        } catch(err) {
+            throw err;
+        } 
+    }
 }
