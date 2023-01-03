@@ -56,4 +56,23 @@ export default class {
             throw err;
         } 
     }
+
+    static async updateStatus( requestId, status ) {
+        try {
+            const token = (await session.get()).token
+            return (await 
+                fetch( `${config.API_URL}/grouprequest/updatestatus/`,
+                    {
+                        method: 'PUT',
+                        headers: {
+                            'Authorization': `Bearer ${token}`,
+                            'content-type': 'application/json'
+                        },
+                        body: JSON.stringify( { requestId, status } )
+                    })
+                    .then( data => data.json() )).message
+        } catch(err) {
+            throw err;
+        } 
+    }
 }

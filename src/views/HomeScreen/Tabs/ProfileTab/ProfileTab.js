@@ -231,32 +231,34 @@ export default function ProfileTab({navigation, userid}) {
         },
     })
 
-    useEffect(() => {
-        const reloadUser = async () => {
-            let id=userid;
-            if ( !userid ) {
-                id = (await session.get()).data.id 
-            }  
-            const result = await users.fetchProfile( id )
-            result['avatarUrl'] = `${APICONFIG.API_URL}/user/avatar/${id}?r=${Math.ceil(999*Math.random())}`
-            // result['languages'] = result['languages'] ? result['languages'] : []
-            // result['languages'] = [ { code: 'pl', level: 'NATIVE'}, { code: 'en', level: 'B1' }, { code: 'fr', level: 'A2' }]
-            if ( result['aboutme'] != aboutMe ) 
-                setAboutMe( result['aboutme'] )
-            if ( result['name'] != userData['name'] || 
-            result['surname'] != userData['surname'] || 
-            result['avatarUrl'] != userData['avatarUrl']) {
-                setUserData(result)
-            }   
+    const reloadUser = async () => {
+        let id=userid;
+        if ( !userid ) {
+            id = (await session.get()).data.id 
+        }  
+        const result = await users.fetchProfile( id )
+        result['avatarUrl'] = `${APICONFIG.API_URL}/user/avatar/${id}?r=${Math.ceil(999*Math.random())}`
+        // result['languages'] = result['languages'] ? result['languages'] : []
+        // result['languages'] = [ { code: 'pl', level: 'NATIVE'}, { code: 'en', level: 'B1' }, { code: 'fr', level: 'A2' }]
+        if ( result['aboutme'] != aboutMe ) 
+            setAboutMe( result['aboutme'] )
+        if ( result['name'] != userData['name'] || 
+        result['surname'] != userData['surname'] || 
+        result['avatarUrl'] != userData['avatarUrl']) {
+            setUserData(result)
+        }   
 
-            setAvatarUrl( result['avatarUrl'] )
-            if ( JSON.stringify(result['languages']) != JSON.stringify(userLanguages) )
-                setUserLanguages(result['languages'])
-            if ( JSON.stringify(result['skills']) != JSON.stringify(userSkills) )
-                setUserSkills(result['skills'])
-            
-            navigation.setParams({ headerTitleOverwrite: isOwner ? "Mój profil" : `${result['name']} ${result['surname']}` })
-        };
+        setAvatarUrl( result['avatarUrl'] )
+        if ( JSON.stringify(result['languages']) != JSON.stringify(userLanguages) )
+            setUserLanguages(result['languages'])
+        if ( JSON.stringify(result['skills']) != JSON.stringify(userSkills) )
+            setUserSkills(result['skills'])
+        
+        navigation.setParams({ headerTitleOverwrite: isOwner ? "Mój profil" : `${result['name']} ${result['surname']}` })
+    };
+
+    useEffect(() => {
+        
         const unsubscribe = navigation.addListener('focus', () => {
             reloadUser();
         })
@@ -278,8 +280,9 @@ export default function ProfileTab({navigation, userid}) {
                 mediaTypes: ImagePicker.MediaTypeOptions.Images,
             })
             await users.uploadAvatar( result )
+            await reloadUser();
         } catch ( err ) {
-            // alert(err)
+            throw err;
         }
         
     }
@@ -291,6 +294,7 @@ export default function ProfileTab({navigation, userid}) {
                 mediaTypes: ImagePicker.MediaTypeOptions.Images,
             })
             await users.uploadAvatar( result )
+            await reloadUser();
         } catch ( err ) {
             throw err;
         }
@@ -306,15 +310,20 @@ export default function ProfileTab({navigation, userid}) {
     }
 
     useEffect(() => {
-        if ( browseImagesResult != null ) {
-            setTimeout( () => {
-                if ( browseImagesResult == 'camera' ) {
-                    changeAvatarWithCamera();
-                } else {
-                    changeAvatarWithLibrary();
-                }
-            }, 1000)
-            setBrowseImagesResult(null);
+        try {
+            if ( browseImagesResult != null ) {
+                setTimeout( () => {
+                    if ( browseImagesResult == 'camera' ) {
+                        changeAvatarWithCamera();
+                    } else {
+                        changeAvatarWithLibrary();
+                    }
+                }, 1000)
+                setBrowseImagesResult(null);
+            }
+        } catch( err ) {
+            alert( err )
+            throw err;
         }
     }, [browseImagesResult])
 

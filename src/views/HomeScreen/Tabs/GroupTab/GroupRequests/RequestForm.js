@@ -9,17 +9,7 @@ import StyleStatics from '../../../../../StyleStatics';
 import grouprequest from '../../../../../api/grouprequest';
 
 
-const fillZero = ( num ) => {
-    let casted = num.toString()
-    return casted.length == 1 ? '0'+casted : casted; 
-}
 
-const dateToString = (date) => {
-    let dd = fillZero(date.getDate());
-    let mm = fillZero(date.getMonth()+1);
-    let yyyy = date.getFullYear();
-    return `${dd}/${mm}/${yyyy}`
-}
 
 export default function RequestForm({ navigation }) {
     const [dateFrom, setDateFrom] = useState(new Date())
@@ -96,7 +86,7 @@ export default function RequestForm({ navigation }) {
                             containerStyle={styles.spacer} 
                             label="Kiedy się zaczyna"
                             isHalfSize={true}
-                            val={dateToString(dateFrom)}
+                            val={time.dateToString(dateFrom)}
                         />
                         <DateTimePickerModal
                             isVisible={openDateFrom}
@@ -107,7 +97,7 @@ export default function RequestForm({ navigation }) {
                                 if ( dateTo.getTime() - date.getTime() < 0 ) {
                                     setDateTo( date )
                                 }
-                                alert(  dateTo.getTime() - dateFrom.getTime() )
+                                // alert(  dateTo.getTime() - dateFrom.getTime() )
                             }}
                             onCancel={() => {
                                 setOpenDateFrom(false)
@@ -124,7 +114,7 @@ export default function RequestForm({ navigation }) {
                             containerStyle={styles.spacer} 
                             label="Kiedy się kończy"
                             isHalfSize={true}
-                            val={dateToString(dateTo)}
+                            val={time.dateToString(dateTo)}
                         />
                         <DateTimePickerModal
                             isVisible={openDateTo}
@@ -143,7 +133,7 @@ export default function RequestForm({ navigation }) {
                 <Text style={[{
                     fontFamily: 'Poppins-SemiBold',
                 }, styles.spacer]}>
-                    Wydarzenie będzie trwać { time.prettyTimespan(dateTo.getTime()-dateFrom.getTime(), false) }
+                    Wydarzenie będzie trwać { time.prettyTimespan( dateTo.getTime()-dateFrom.getTime(), false) }
                 </Text>
                 <WTextForm 
                     containerStyle={styles.spacer} 

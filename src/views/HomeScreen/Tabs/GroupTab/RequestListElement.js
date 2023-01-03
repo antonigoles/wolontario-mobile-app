@@ -87,12 +87,14 @@ export default function RequestListElement({ title, org, status, createdBy }) {
     return (
         <View style={styles.view}>
             <View style={styles.textBox}>
+                { createdBy ? 
                 <View style={styles.usernamebox}>
                     { createdBy.trusted ? 
                     <Text style={styles.trustedTag}> Zaufany </Text>
                     : ''}
                     <Text style={styles.username}>{createdBy.name} {createdBy.surname}</Text>
                 </View>
+                : '' }
                 <Text numberOfLines={1} style={styles.name}>{title}</Text>
                 <Text numberOfLines={1} style={styles.orgName}>{org}</Text>
             </View>

@@ -1,5 +1,5 @@
-export default {
-    prettyTimespan: ( time, fromNow=true ) => {
+export default class {
+    static prettyTimespan( time, fromNow=true )  {
         let startTime = fromNow ? Date.now() - time : time
         const secondSpan = Math.floor((startTime)/1000)
         const minuteSpan = Math.floor(secondSpan/60)
@@ -21,5 +21,17 @@ export default {
             result = `${yearsSpan} ${ yearsSpan == 1 ? 'rok' : yearsSpan < 5 ? 'lata' : 'lat' }`
 
         return result
+    }
+
+    static fillZero( num ) {
+        let casted = num.toString()
+        return casted.length == 1 ? '0'+casted : casted; 
+    }
+    
+    static dateToString(date) {
+        let dd = this.fillZero(date.getDate());
+        let mm = this.fillZero(date.getMonth()+1);
+        let yyyy = date.getFullYear();
+        return `${dd}/${mm}/${yyyy}`
     }
 }

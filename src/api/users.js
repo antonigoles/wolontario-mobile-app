@@ -193,6 +193,7 @@ export default class {
                 }
             } ).then( data => data.json() )
         } catch ( err ) {
+            // alert(err)
             throw err;
         }
     }

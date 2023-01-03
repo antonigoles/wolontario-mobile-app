@@ -13,6 +13,8 @@ import { useFonts, Poppins_400Regular, Poppins_600SemiBold,
 import { useEffect, useState } from 'react';
 import GLOBAL from './src/helpers/global';
 import { communicationBus } from './src/helpers/comBus';
+import session from './src/helpers/session';
+import users from './src/api/users';
 
 const Stack = createNativeStackNavigator()
 
@@ -26,6 +28,31 @@ export default function App() {
 	GLOBAL.comBus = comBus
 	GLOBAL.isSignedIn = isSignedIn;
 	GLOBAL.setIsSignedIn = setIsSignedIn
+
+	useEffect(()=> {
+		const loadSession = async () => {
+			const sessionData = await session.get()
+
+			if ( sessionData ) {
+				// if session exits and token is still valid, update session
+				try {
+					const newProfileData = await users.fetchProfile( sessionData.data.id )
+					await session.set({ ...sessionData, data: newProfileData } )
+				} catch ( err ) {
+					await session.set(null)
+				}
+
+				const newSession = await session.get();
+
+				setIsSignedIn( Boolean(newSession) )
+			} else {
+				setIsSignedIn(false);
+			}
+
+			
+		}
+		loadSession()
+	},[])
 
 	const [ fontsLoaded ] = useFonts({
 		'Poppins-Light': Poppins_300Light,
