@@ -1,8 +1,8 @@
 import session from '../helpers/session.js';
 import config from './config.js'
 
-export default {
-    requestLogin: async ( data ) => {
+export default class {
+    static async requestLogin ( data ) {
         try {
             const result = await fetch( `${config.API_URL}/user/login`, 
                 {
@@ -11,14 +11,14 @@ export default {
                 })
                 .then( res => res.json() )
     
-            // alert( JSON.stringify( data )) 
+            if ( result.error ) throw result; 
             return result;
         } catch( err ) {
             throw err;
         }
-    },
+    }
 
-    requestRegister: async ( data ) => {
+    static async requestRegister ( data ) {
         try {
             const result = await fetch( `${config.API_URL}/user/register`, 
                 {
@@ -27,21 +27,21 @@ export default {
                 })
                 .then( res => res.json() )
             
-            // alert( JSON.stringify( data )) 
+            if ( result.error ) throw result; 
             return result;
         } catch( err ) {
             throw err;
         }
-    },
+    }
 
     
-    async validateCurrentSession(callback) {
+    static async validateCurrentSession(callback) {
         let result = true;
         if ( callback ) callback( result )
         return true;
-    },
+    }
 
-    async logout() {
+    static async logout() {
         try {
             const token = (await (session.get())).token;
             await fetch(`${config.API_URL}/user/blacklisttoken`, {
@@ -55,5 +55,42 @@ export default {
         } catch (err) {
             throw err;
         }
-    },
+    }
+
+
+    static async verifyEmail( email, code ) {
+        try {
+            const result = await fetch(`${config.API_URL}/user/confirm-email/`, {
+                method: 'POST',
+                headers: {
+                    'content-type': 'application/json'
+                },
+                body: JSON.stringify({ email: email, token: code })
+            })
+            .then( res => res.json() )
+            if ( result.error ) throw result; 
+            return result;
+        } catch (err) {
+            throw err;
+        }
+    }
+
+    static async resetEmailToken( email ) {
+        try {
+            const result = await fetch(`${config.API_URL}/user/reset-email-token/`, {
+                method: 'POST',
+                headers: {
+                    'content-type': 'application/json'
+                },
+                body: JSON.stringify({ email: email })
+            })
+            .then( res => res.json() )
+            if ( result.error ) throw result; 
+            return result;
+        } catch (err) {
+            throw err;
+        }
+    }
+
+
 }

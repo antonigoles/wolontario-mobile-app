@@ -13,7 +13,11 @@
     },
     "packagerOpts": {
       "config": "metro.config.js",
-      "sourceExts": ["js", "jsx", "css"]
+      "sourceExts": [
+        "js",
+        "jsx",
+        "css"
+      ]
     },
     "updates": {
       "fallbackToCacheTimeout": 0
@@ -29,11 +33,16 @@
     },
     "android": {
       "softwareKeyboardLayoutMode": "pan",
-      "permissions": [ "CAMERA", "WRITE_EXTERNAL_STORAGE" ],
+      "permissions": [
+        "android.permission.CAMERA",
+        "android.permission.WRITE_EXTERNAL_STORAGE",
+        "android.permission.RECORD_AUDIO"
+      ],
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
-      }
+      },
+      "package": "com.wolontario.wolontario"
     },
     "web": {
       "favicon": "./assets/favicon.png"
@@ -45,6 +54,11 @@
           "photosPermission": "Aplikacja potrzebuje dostępu do twoich zdjęć abyś mógł używać ich np. jako zdjęcie profliowe"
         }
       ]
-    ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "7dd9d417-28df-4641-b3e9-82cbe5acd9b6"
+      }
+    }
   }
 }

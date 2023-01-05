@@ -15,6 +15,9 @@ import GLOBAL from './src/helpers/global';
 import { communicationBus } from './src/helpers/comBus';
 import session from './src/helpers/session';
 import users from './src/api/users';
+import { Modal } from 'react-native-paper';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
+import GlobalPopUp from './src/GlobalPopUp';
 
 const Stack = createNativeStackNavigator()
 
@@ -24,6 +27,11 @@ export default function App() {
 	const [ comBus, setComBus ] = useState( new communicationBus() )
 	const [ popUpContent, setPopUpContent ] = useState();
 	const [ isSignedIn, setIsSignedIn ] = useState(false)
+	const [ globalPopUpVisibility, setGlobalPopupVisibility ] = useState(false);
+	const [ globalPopUpData, setGlobalPopUpData ] = useState({
+		title: "",
+		content: "",
+	})
 
 	GLOBAL.comBus = comBus
 	GLOBAL.isSignedIn = isSignedIn;
@@ -67,9 +75,10 @@ export default function App() {
 	}
 	
 	return (
-		<NavigationContainer style={ styles.container } >
-			<Stack.Navigator initialRouteName="Login">
-				<Stack.Group screenOptions={{ headerShown: false }}>
+		<SafeAreaProvider>
+			<NavigationContainer style={ styles.container } >
+				<Stack.Navigator initialRouteName="Login">
+					<Stack.Group screenOptions={{ headerShown: false }}>
 					{ isSignedIn ? 
 					<>
 						<Stack.Screen name="Home" component={HomeScreen} />
@@ -80,9 +89,10 @@ export default function App() {
 						<Stack.Screen name="Register" component={RegisterScreen} />
 					</>						
 					}	
-				</Stack.Group>
-			</Stack.Navigator>
-		</NavigationContainer>
+					</Stack.Group>
+				</Stack.Navigator>
+			</NavigationContainer>
+		</SafeAreaProvider>
 	);
 }
 

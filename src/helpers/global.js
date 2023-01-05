@@ -3,4 +3,6 @@ export default {
     mainNavigation: null,
     isSignedIn: null,
     setIsSignedIn: null,
+    popUp: null,
+    popups: {}
 }

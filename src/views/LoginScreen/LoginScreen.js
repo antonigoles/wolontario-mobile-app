@@ -8,6 +8,8 @@ import auth from '../../api/auth.js';
 import AsyncStorage from "@react-native-async-storage/async-storage"
 import session from '../../helpers/session'
 import remeberedData from '../../helpers/remeberedData';
+import global from '../../helpers/global';
+import WAlert from '../../components/WAlert';
 
 export default function LoginScreen({ navigation }) {
 	const [ error, setError ] = useState("");
@@ -89,29 +91,30 @@ export default function LoginScreen({ navigation }) {
 
 	return (
 		<View style={style.view}>
-		<View style={style.header}>
-			<Text style={style.headerTop}>
-			Witaj
-			</Text>
-			<Text style={style.headerSub}>
-			<Text> Nie masz jeszcze konta? </Text>
-			<Text 
-				style={style.joinButton}
-				onPress={()=>navigation.navigate('Register')}
-			> 
-				Dołącz teraz 
-			</Text> 
-			</Text>
-		</View>
-		<View style={style.inputContainer}>
-			<WTextInput setVal={setEmailValue} val={emailValue} onUpdate={generateOnUpdate("email")} containerStyle={style.textForm} label="Email" placeholder="Wpisz swój adres email" />
-			<WTextInput setVal={setPasswordValue} val={passwordValue} onUpdate={generateOnUpdate("password")} containerStyle={style.textForm} label="Hasło" placeholder="Wpisz swoje hasło" isSecure={true} />
-			<WCheckbox onChange={generateOnUpdate("rememberme")} label="Zapamiętaj mnie" />
-			<Text style={style.error}>{error}</Text>
-		</View>
-		<View>
-			<WButton onClick={attemptLogin} disabled={loginButtonDisabled} containerStyle={style.loginButton} label="Zaloguj" />
-		</View>
+			<WAlert id={"loginScreenPopUp"} />
+			<View style={style.header}>
+				<Text style={style.headerTop}>
+				Witaj
+				</Text>
+				<Text style={style.headerSub}>
+				<Text> Nie masz jeszcze konta? </Text>
+				<Text 
+					style={style.joinButton}
+					onPress={()=>navigation.navigate('Register')}
+				> 
+					Dołącz teraz 
+				</Text> 
+				</Text>
+			</View>
+			<View style={style.inputContainer}>
+				<WTextInput setVal={setEmailValue} val={emailValue} onUpdate={generateOnUpdate("email")} containerStyle={style.textForm} label="Email" placeholder="Wpisz swój adres email" />
+				<WTextInput setVal={setPasswordValue} val={passwordValue} onUpdate={generateOnUpdate("password")} containerStyle={style.textForm} label="Hasło" placeholder="Wpisz swoje hasło" isSecure={true} />
+				<WCheckbox onChange={generateOnUpdate("rememberme")} label="Zapamiętaj mnie" />
+				<Text style={style.error}>{error}</Text>
+			</View>
+			<View>
+				<WButton onClick={attemptLogin} disabled={loginButtonDisabled} containerStyle={style.loginButton} label="Zaloguj" />
+			</View>
 		</View>
 	);
 	}
