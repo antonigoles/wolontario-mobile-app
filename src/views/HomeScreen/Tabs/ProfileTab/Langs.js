@@ -10,7 +10,7 @@ import global from '../../../../helpers/global';
 import { comBusMessage } from '../../../../helpers/comBus'
 
 export default function Langs({ navigation }) {
-    const [ langs, setLangs ] = useState([])
+    const [ langs, setLangs ] = useState(null)
 
     const styles = StyleSheet.create({
         view: {

@@ -7,7 +7,7 @@ import WLoadingAnimation from "../../../../components/WLoadingAnimation"
 import skillLevels from '../../../../helpers/skillLevels';
 
 export default function EditSkills({ navigation }) {
-    const [ skills, setSkills ] = useState([])
+    const [ skills, setSkills ] = useState(null)
 
     const styles = StyleSheet.create({
         view: {

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { View, Text, Alert, StyleSheet  } from 'react-native';
+import { View, Text, Alert, StyleSheet, SafeAreaView   } from 'react-native';
 import auth from '../../api/auth'
 import { NavigationContainer, DefaultTheme } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -25,6 +25,10 @@ import GroupRequestsAdmin from './Tabs/GroupTab/GroupRequestsAdmin';
 import OptionsTab from './Tabs/OptionsTab/OptionsTab';
 import session from '../../helpers/session';
 import GroupRequestForm from './Tabs/GroupTab/GroupRequests/RequestForm'
+import GroupOptions from './Tabs/GroupTab/GroupOptions/GroupOptions';
+import FadeIn from '../../animations/FadeIn'
+import GroupAnnouncements from './Tabs/GroupTab/GroupOptions/GroupAnnouncements/GroupAnnouncements';
+import WAlert from '../../components/WAlert';
 
 const Tab = createBottomTabNavigator();
 
@@ -40,7 +44,9 @@ const screenNameTranslations = {
 	"LangEdit": "Edytuj lub Dodaj",
 	"Options": "Menu",
 	"GroupRequests": "Prośby o utworzenie wolontariatu",
-	"GroupRequestForm": "Wyślij prośbę o utworzenie wolontariatu"
+	"GroupRequestForm": "Wyślij prośbę o utworzenie wolontariatu",
+	"GroupOptions": "Wolontariat",
+	"GroupAnnouncements": "Komunikaty",
 }
 
 const MainTheme = {
@@ -59,6 +65,16 @@ export default function HomeScreen({ navigation }) {
 	const [ isGlobalAdmin, setIsGlobalAdmin ] = useState(null);
 
 	global.mainNavigation = navigation;
+
+	global.popUp = (title, content) => {
+		global.popups["HomeScreenAlert"].runPopup(title, content)
+	}
+
+	global.raportError = (error) => {
+		global.popups["HomeScreenAlert"].runPopup("O nie!", 
+			`Wystąpił nieoczekiwany błąd! Zostanie on zgłoszony do nas i 
+			zostanie naprawiony jak najszybciej! Spróbuj ponownie później. Treść błędu: ${error}`)
+	}
 
 	useEffect(()=>{
 		// WE DONT'T WANT TO QUIT THIS
@@ -144,34 +160,49 @@ export default function HomeScreen({ navigation }) {
 		tabBarStyle: { display: "none" },
 	}
 
+	const hideOnTab = {
+		tabBarButton: () => null,
+	}
+
 	const refreshOnEnter = {
 		unmountOnBlur: true,
 	}
 
+	const componentBuilder = ( Comp, additionalParams={} ) => {
+		return props => 
+			<FadeIn navigation={props.navigation}> 
+				<Comp {...props} { ...additionalParams } /> 
+			</FadeIn> 
+	}
 
 	return (
-		<NavigationContainer theme={MainTheme} independent={true}>
-			<Tab.Navigator backBehavior="history"  {  ...bottomNavigatorConfigs } >
-				<Tab.Screen name="Home">
-					{ props => <HomeTab {...props} setNav={setNav} />}	
-				</Tab.Screen>
-				<Tab.Screen name="Group" component={GroupTab}  />
-				<Tab.Screen name="Notifications" component={NotificationTab}  />
-				<Tab.Screen name="Profile" component={ProfileTab}  />
-				<Tab.Screen name="Skills" component={Skills} options={{...hiddenTabOptions, ...refreshOnEnter}} />
-				<Tab.Screen name="SkillEdit" component={SkillEdit} options={{...hiddenTabOptions }} />
-				<Tab.Screen name="Langs" component={Langs} options={{...hiddenTabOptions, ...refreshOnEnter }} />
-				<Tab.Screen name="LangEdit" component={LangEdit} options={{...hiddenTabOptions }} />
-				<Tab.Screen name="WChoiceList" component={WChoiceList} options={{...hiddenTabOptions, ...refreshOnEnter}} />
-				<Tab.Screen name="Options" component={OptionsTab} options={{...hiddenTabOptions}} />
-				<Tab.Screen 
-					name="GroupRequests" 
-					component={isGlobalAdmin ? GroupRequestsAdmin : GroupRequests} 
-					options={{...hiddenTabOptions, ...refreshOnEnter}} 
-				/>
-				<Tab.Screen name="GroupRequestForm" component={GroupRequestForm} options={{...hiddenTabOptions, ...refreshOnEnter}} />
-			</Tab.Navigator>
-    	</NavigationContainer>
+		<SafeAreaView style={{ width: "100%", height: "100%"}}>
+			<WAlert id={"HomeScreenAlert"} />
+			<NavigationContainer theme={MainTheme} independent={true}>
+				<Tab.Navigator backBehavior="history"  {  ...bottomNavigatorConfigs } >
+					<Tab.Screen name="Home">
+						{ componentBuilder( HomeTab, { setNav: setNav }) }
+					</Tab.Screen>
+					<Tab.Screen name="Group" component={ componentBuilder(GroupTab) }  />
+					<Tab.Screen name="Notifications" component={ componentBuilder(NotificationTab) }  />
+					<Tab.Screen name="Profile" component={ componentBuilder(ProfileTab) }  />
+					<Tab.Screen name="Skills" component={ componentBuilder(Skills) } options={{...hiddenTabOptions, ...refreshOnEnter}} />
+					<Tab.Screen name="SkillEdit" component={ componentBuilder(SkillEdit) } options={{...hiddenTabOptions }} />
+					<Tab.Screen name="Langs" component={ componentBuilder(Langs) } options={{...hiddenTabOptions, ...refreshOnEnter }} />
+					<Tab.Screen name="LangEdit" component={ componentBuilder(LangEdit) } options={{...hiddenTabOptions }} />
+					<Tab.Screen name="WChoiceList" component={ componentBuilder(WChoiceList) } options={{...hiddenTabOptions, ...refreshOnEnter}} />
+					<Tab.Screen name="Options" component={ componentBuilder(OptionsTab) } options={{...hiddenTabOptions}} />
+					<Tab.Screen 
+						name="GroupRequests" 
+						component={ isGlobalAdmin ? componentBuilder( GroupRequestsAdmin ) : GroupRequests } 
+						options={{...hiddenTabOptions, ...refreshOnEnter}} 
+					/>
+					<Tab.Screen name="GroupRequestForm" component={componentBuilder(GroupRequestForm)} options={{...hiddenTabOptions, ...refreshOnEnter}} />
+					<Tab.Screen name="GroupOptions" component={componentBuilder(GroupOptions)} options={{ ...hiddenTabOptions }} />
+					<Tab.Screen name="GroupAnnouncements" component={componentBuilder(GroupAnnouncements)} options={{ ...hiddenTabOptions }} />
+				</Tab.Navigator>
+			</NavigationContainer>
+		</SafeAreaView>
 	);
 }
 

@@ -43,12 +43,13 @@ export default function WTextForm({
       display: 'flex',
       flexDirection: 'row',
       justifyContent: 'center',
+      
     },
   
     textInput: { ...{
       backgroundColor: StyleStatics.inputBlock,
       padding: 15,
-
+      textAlignVertical: 'top',
       borderRadius: 12,
       fontSize: 14,
       fontFamily: 'Poppins',

@@ -20,8 +20,6 @@ export default function GroupRequests({ navigation }) {
             } catch ( err ) {
                 alert(err)
             }
-            
-            
         }
         loadRequests()
     },[])

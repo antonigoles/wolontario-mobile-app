@@ -56,8 +56,8 @@ export default function WImage({ url, externalStyle }) {
                     idx * 100,
                     withRepeat( 
                         withSequence( 
-                            withTiming(0.1, animConfig), 
-                            withTiming(1, animConfig),
+                            withTiming(1, animConfig), 
+                            withTiming(0.1, animConfig),
                         ), 
                         22222, 
                         true 

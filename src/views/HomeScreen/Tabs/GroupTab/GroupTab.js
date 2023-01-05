@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet } from 'react-native'
+import { View, Text, StyleSheet, Pressable } from 'react-native'
 import AnimatedTab from '../AnimatedTab';
 import { useState } from 'react'
 import StyleStatics from '../../../../StyleStatics';
@@ -6,6 +6,7 @@ import WButton from '../../../../components/WButton';
 import group from '../../../../api/group';
 import WImage from '../../../../components/WImage';
 import config from '../../../../api/config';
+import ComponentApear from '../../../../animations/ComponentApear';
 
 export default function GroupTab({navigation}) {
 
@@ -78,6 +79,13 @@ export default function GroupTab({navigation}) {
         return unsubscribe;
     },[])
 
+    const displayGroup = ( group ) => {
+        navigation.navigate( "GroupOptions", { 
+            displayGroup: group.id, 
+            headerTitleOverwrite: group.name, 
+        } )
+    }
+
     return (
         <AnimatedTab navigation={navigation}>
             <View style={styles.view}>
@@ -85,27 +93,34 @@ export default function GroupTab({navigation}) {
                     <View style={styles.listBox}>
                         {groups.map( (group, idx) => {
                             return ( 
-                                <View key={idx} style={styles.listElemet}>
-                                    <WImage 
-                                        externalStyle={{ width: 60, height: 60, borderRadius: 2999, }} 
-                                        url={ group.avatarUrl }
-                                    />
-                                    <View style={{
-                                        marginLeft: 15,
-                                    }}>
-                                        <Text style={{
-                                            fontFamily: 'Poppins-Bold',
-                                            color: StyleStatics.darkText,
-                                            fontSize: 15,
-                                        }}>{group.name}</Text>
-                                        <Text style={{
-                                            fontFamily: 'Poppins',
-                                            color: StyleStatics.darkText,
-                                            fontSize: 15,
-                                            marginTop: -5,
-                                        }}>{group.orgName}</Text>
-                                    </View>
-                                </View> 
+                                <ComponentApear key={idx} >
+                                    <Pressable 
+                                        style={styles.listElemet}
+                                        onPress={ () => {
+                                            displayGroup( group );
+                                        }}
+                                    >
+                                        <WImage 
+                                            externalStyle={{ width: 60, height: 60, borderRadius: 2999, }} 
+                                            url={ group.avatarUrl }
+                                        />
+                                        <View style={{
+                                            marginLeft: 15,
+                                        }}>
+                                            <Text style={{
+                                                fontFamily: 'Poppins-Bold',
+                                                color: StyleStatics.darkText,
+                                                fontSize: 15,
+                                            }}>{group.name}</Text>
+                                            <Text style={{
+                                                fontFamily: 'Poppins',
+                                                color: StyleStatics.darkText,
+                                                fontSize: 15,
+                                                marginTop: -5,
+                                            }}>{group.orgName}</Text>
+                                        </View>
+                                    </Pressable> 
+                                </ComponentApear>
                             )
                         })}
                     </View>
