@@ -7,6 +7,7 @@ export default function WText({
     label, 
     content,
     style,
+    fontSize=16,
   }) {
 
   const styles = StyleSheet.create({
@@ -15,10 +16,11 @@ export default function WText({
     },
     label: {
       fontFamily: 'Poppins-Bold',
-      fontSize: 16,
+      fontSize: fontSize,
     },
     contentBox: {
         fontFamily: 'Poppins',
+        fontSize: fontSize-2
     }
   })
 

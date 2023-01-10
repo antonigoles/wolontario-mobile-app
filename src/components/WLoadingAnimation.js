@@ -4,7 +4,7 @@ import { View } from "react-native-animatable";
 import Animated, { withRepeat, Easing, useSharedValue, useAnimatedStyle, withSequence, withTiming, withDelay } from 'react-native-reanimated';
 import StyleStatics from "../StyleStatics";
 
-export default function WImage({ url, externalStyle }) {
+export default function WLoadingAnimation() {
     const ballPos = [ useSharedValue(0), useSharedValue(0), useSharedValue(0) ];
     
     const animatedStyleGenerator = (idx) => {
@@ -25,6 +25,13 @@ export default function WImage({ url, externalStyle }) {
     // },[open])
 
     const styles = StyleSheet.create({
+        view: {
+            widht: "100%",
+            height: "100%",
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+        },
         dotsbox: {
             width: "100%",
             height: "100%",
@@ -68,7 +75,7 @@ export default function WImage({ url, externalStyle }) {
 
 
     return (
-        <View>
+        <View style={styles.view}>
             <View style={styles.dotsbox}>
                 <Animated.View style={[ styles.dot, animatedStyleGenerator(0) ]}></Animated.View>
                 <Animated.View style={[ styles.dot, animatedStyleGenerator(1) ]}></Animated.View>

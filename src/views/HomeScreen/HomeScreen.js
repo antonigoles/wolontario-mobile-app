@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { View, Text, Alert, StyleSheet, SafeAreaView   } from 'react-native';
+import { View, Text, Alert, StyleSheet, SafeAreaView, StatusBar   } from 'react-native';
 import auth from '../../api/auth'
 import { NavigationContainer, DefaultTheme } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -28,7 +28,10 @@ import GroupRequestForm from './Tabs/GroupTab/GroupRequests/RequestForm'
 import GroupOptions from './Tabs/GroupTab/GroupOptions/GroupOptions';
 import FadeIn from '../../animations/FadeIn'
 import GroupAnnouncements from './Tabs/GroupTab/GroupOptions/GroupAnnouncements/GroupAnnouncements';
+import GroupAdverts from './Tabs/GroupTab/GroupOptions/GroupAdverts/GroupAdverts'
 import WAlert from '../../components/WAlert';
+import GroupTasks from './Tabs/GroupTab/GroupOptions/GroupTasks/GroupTasks';
+import CreateTask from './Tabs/GroupTab/GroupOptions/GroupTasks/CreateTask';
 
 const Tab = createBottomTabNavigator();
 
@@ -47,6 +50,9 @@ const screenNameTranslations = {
 	"GroupRequestForm": "Wyślij prośbę o utworzenie wolontariatu",
 	"GroupOptions": "Wolontariat",
 	"GroupAnnouncements": "Komunikaty",
+	'GroupAdverts': "Ogłoszenia grupy",
+	"GroupTasks": "Zadania",
+	"CreateTask": "Dodaj zadanie"
 }
 
 const MainTheme = {
@@ -66,14 +72,14 @@ export default function HomeScreen({ navigation }) {
 
 	global.mainNavigation = navigation;
 
-	global.popUp = (title, content) => {
-		global.popups["HomeScreenAlert"].runPopup(title, content)
+	global.popUp = (title, content, moreInfo) => {
+		global.popups["HomeScreenAlert"].runPopup(title, content, moreInfo)
 	}
 
 	global.raportError = (error) => {
 		global.popups["HomeScreenAlert"].runPopup("O nie!", 
 			`Wystąpił nieoczekiwany błąd! Zostanie on zgłoszony do nas i 
-			zostanie naprawiony jak najszybciej! Spróbuj ponownie później. Treść błędu: ${error}`)
+			zostanie naprawiony jak najszybciej! Spróbuj ponownie później.`, error)
 	}
 
 	useEffect(()=>{
@@ -177,6 +183,7 @@ export default function HomeScreen({ navigation }) {
 
 	return (
 		<SafeAreaView style={{ width: "100%", height: "100%"}}>
+			<StatusBar backgroundColor={"#ffffff"} barStyle="dark-content" />
 			<WAlert id={"HomeScreenAlert"} />
 			<NavigationContainer theme={MainTheme} independent={true}>
 				<Tab.Navigator backBehavior="history"  {  ...bottomNavigatorConfigs } >
@@ -200,6 +207,9 @@ export default function HomeScreen({ navigation }) {
 					<Tab.Screen name="GroupRequestForm" component={componentBuilder(GroupRequestForm)} options={{...hiddenTabOptions, ...refreshOnEnter}} />
 					<Tab.Screen name="GroupOptions" component={componentBuilder(GroupOptions)} options={{ ...hiddenTabOptions }} />
 					<Tab.Screen name="GroupAnnouncements" component={componentBuilder(GroupAnnouncements)} options={{ ...hiddenTabOptions }} />
+					<Tab.Screen name="GroupAdverts" component={componentBuilder(GroupAdverts)} options={{ ...hiddenTabOptions }} />	
+					<Tab.Screen name="GroupTasks" component={componentBuilder(GroupTasks)} options={{ ...hiddenTabOptions }} />		
+					<Tab.Screen name="CreateTask" component={componentBuilder(CreateTask)} options={{ ...hiddenTabOptions }} />		
 				</Tab.Navigator>
 			</NavigationContainer>
 		</SafeAreaView>

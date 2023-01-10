@@ -35,7 +35,7 @@ export default function BrowseImages({ navigation, onHide, setOutput })  {
             flexDirection: 'row',
             width: 300,
             alignItems: 'center',
-            justifyContent: 'space-between',
+            justifyContent: 'center',
             height: "80%",
         },
         choice: {
@@ -70,10 +70,6 @@ export default function BrowseImages({ navigation, onHide, setOutput })  {
                     <Pressable onPress={ () => { setOutput('library'); onHide() } } style={styles.choice}>
                         <Text style={styles.choiceTitle}>Galeria</Text>
                         <GaleryIcon {...iconOptions} />
-                    </Pressable>
-                    <Pressable onPress={ () => { setOutput('camera'); onHide() } } style={styles.choice}>
-                        <Text style={styles.choiceTitle}>Aparat</Text>
-                        <CameraIcon {...iconOptions} />
                     </Pressable>
                 </View>
                 <Text

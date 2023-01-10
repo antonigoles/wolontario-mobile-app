@@ -119,7 +119,7 @@ export default function GroupAnnouncements({ navigation, route }) {
                         />
                     }
                 >
-                    { data.map( (e,idx) => <Announcement 
+                    { data.length > 0 ? data.map( (e,idx) => <Announcement 
                         key={idx}
                         createdAt={e.createdAt} 
                         title={ e.title } 
@@ -127,7 +127,30 @@ export default function GroupAnnouncements({ navigation, route }) {
                         onReadMore={() => {
                             readMore( idx );
                         }}
-                    />)
+                    />) 
+                    :
+                        <Text
+                            style={{
+                                fontFamily: 'Poppins-Medium',
+                                marginTop: 50,
+                                width: "80%",
+                                textAlign: 'center',
+                                color: StyleStatics.lightText,
+                                fontSize: 20,
+                            }}
+                        > 
+                            Wygląda na to że nie ma żadnych komunikatów {'\n'} ... {'\n'}
+                            <Text
+                                style={{
+                                    fontFamily: 'Poppins-Medium',
+                                    textAlign: 'center',
+                                    color: StyleStatics.disabled,
+                                    fontSize: 12,
+                                }}
+                            >
+                                (przeciągnij w dół aby odświeżyć)
+                            </Text>
+                        </Text>
                     }
                 </ScrollView>
             : <WLoadingAnimation />
@@ -135,7 +158,7 @@ export default function GroupAnnouncements({ navigation, route }) {
             { isUserAdmin &&
                 <Pressable onPress={ () => { setAddBroadcastVisibility(true) } } style={styles.addButton}>
                     <PlusIcon { ...iconOptions }/>
-                    <Text style={styles.addButtonFont}>Dodaj ogłosznie</Text>
+                    <Text style={styles.addButtonFont}>Dodaj komunikat</Text>
                 </Pressable>
             }
         </View>
@@ -261,7 +284,7 @@ function ReadMoreModal({ annoucementId, groupId, createdAt, title, message, onHi
     const proceedDelete = async () => {
         try {
             const result = await group.deleteAnnouncement(groupId, annoucementId)
-            global.popUp("Sukces", "Pomyślnie usunięto ogłoszenie")
+            global.popUp("Sukces", "Pomyślnie usunięto komunikat")
             onHide(); 
         } catch (error) {
             global.popUp("Oh nie!", `Wystąpił błąd w trakcie usuwanie... ${error}`)
@@ -269,7 +292,7 @@ function ReadMoreModal({ annoucementId, groupId, createdAt, title, message, onHi
     }
 
     const deleteBroadcast = () => {
-        Alert.alert("Uwaga", "Czy na pewno chcesz usunąć to ogłoszenie? (Jest to nieodwracalne)",
+        Alert.alert("Uwaga", "Czy na pewno chcesz usunąć ten komunikat? (Jest to nieodwracalne)",
         [
             { text: 'Anuluj', style: 'cancel', onPress: () => {} },
             { text: 'Usuń!', style: 'destructive', onPress: () => {
@@ -394,7 +417,7 @@ function AddBroadcastModal({ onHide, groupid }) {
                 return global.popUp("Złe dane", "Tytuł lub treść są zdecydowanie za krótkie");
             }
             const result = await group.postAnnouncement( groupid, title, message );
-            global.popUp("Sukces", "Pomyślnie dodano ogłoszenie")
+            global.popUp("Sukces", "Pomyślnie dodano komunikat")
             onHide();
         } catch (error) {
             global.popUp("Błąd", `O nie! Wystąpił bład... ${error}`);
@@ -405,7 +428,7 @@ function AddBroadcastModal({ onHide, groupid }) {
         <View style={styles.view}>
             <View style={styles.base}>
                 <View style={styles.header}>
-                    <Text style={styles.headerFont}>Dodaj nowe ogłoszenie</Text>
+                    <Text style={styles.headerFont}>Dodaj nowy komunikat</Text>
                 </View>
                 <View style={styles.inputContainer}>
                     <KeyboardAvoidingView
@@ -416,16 +439,16 @@ function AddBroadcastModal({ onHide, groupid }) {
                                 val={title} 
                                 setVal={setTitle} 
                                 containerStyle={[styles.spacer]}
-                                label="Tytuł ogłoszenia" 
-                                placeholder="Tytuł ogłoszenia" 
+                                label="Tytuł komunikatu" 
+                                placeholder="Tytuł komunikatu" 
                             />
                             <WTextInput 
                                 val={message}
                                 setVal={setMessage}
                                 containerStyle={[styles.spacer]}
                                 inputStyle={{ maxHeight: "90%" }} 
-                                label="Treść ogłoszenia"
-                                placeholder="Treść ogłoszenia"
+                                label="Treść komunikatu"
+                                placeholder="Treść komunikatu"
                                 additionalInputParams={{
                                     multiline: true,
                                     numberOfLines: 12,

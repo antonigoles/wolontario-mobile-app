@@ -2,9 +2,9 @@
   "expo": {
     "name": "wolontario-app",
     "slug": "wolontario-app",
-    "version": "1.0.0",
+    "version": "0.1",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/appicon.png",
     "userInterfaceStyle": "automatic",
     "splash": {
       "image": "./assets/splashscreen2.png",
@@ -33,14 +33,14 @@
     },
     "android": {
       "softwareKeyboardLayoutMode": "pan",
+      "primaryColor": "#FFFFFF",
       "permissions": [
         "android.permission.CAMERA",
-        "android.permission.WRITE_EXTERNAL_STORAGE",
-        "android.permission.RECORD_AUDIO"
+        "android.permission.WRITE_EXTERNAL_STORAGE"
       ],
       "adaptiveIcon": {
-        "foregroundImage": "./assets/appicon.png",
-        "backgroundColor": "#FFFFFF"
+        "backgroundColor": "#ffffff",
+        "foregroundImage": "./assets/wolonicon.png"
       },
       "package": "com.wolontario.wolontario"
     },

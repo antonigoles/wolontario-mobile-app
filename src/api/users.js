@@ -184,7 +184,7 @@ export default class {
             let formData = new FormData()
             formData.append('avatar', { uri: localUri, name: filename, type })
             const token = (await session.get()).token
-            return await fetch( `${config.API_URL}/user/upload-avatar/`, {
+            let result = await fetch( `${config.API_URL}/user/upload-avatar/`, {
                 method: 'POST',
                 body: formData,
                 headers: {
@@ -192,6 +192,8 @@ export default class {
                     'content-type': 'multipart/form-data',
                 }
             } ).then( data => data.json() )
+            if ( result.error ) throw result
+            return result
         } catch ( err ) {
             // alert(err)
             throw err;

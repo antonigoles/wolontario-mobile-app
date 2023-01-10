@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, Modal, Pressable } from 'react-native';
 import global from '../helpers/global';
 import StyleStatics from '../StyleStatics';
+import WDrawer from './WDrawer';
 
 export default function WAlert({ id }) {
     const [ visible, setVisible ] = useState(false);
@@ -10,13 +11,16 @@ export default function WAlert({ id }) {
     const [ buttons, setButtons ] = useState(null);
     const [ closeCallback, setOnCloseCallback ] = useState(null)
     const [ callbackReady, setCallbackReady ] = useState(false);
+    const [ moreInfo, setMoreInfo ] = useState(null)
+    const [ showMoreInfo, setShowMoreInfo ] = useState(false)
 
     global.popups[ id ] = {
-        runPopup: (label, content, buttons=null, ) => {
+        runPopup: (label, content, moreInfo, buttons=null, ) => {
             setVisible(true);
             setButtons( buttons )
             setLabel( label )
             setContent( content )
+            setMoreInfo( moreInfo )
         }
     }
 
@@ -38,6 +42,7 @@ export default function WAlert({ id }) {
             // marginBottom: 100,
             display: 'flex',
             alignItems: 'center',
+            maxHeight: "100%",
         },
         header: {
             width: "92%",
@@ -61,6 +66,7 @@ export default function WAlert({ id }) {
             alignItems: 'center',
             justifyContent: 'center',
             margin: 40,
+            maxHeight: "70%",
         },
 
         contentFont: {
@@ -96,7 +102,30 @@ export default function WAlert({ id }) {
             color: StyleStatics.success,
             fontSize: 16,
             
+        },
+        moreInfoContent: {
+            display: showMoreInfo ? 'flex' : 'none',
+            textAlign: 'center',
+            fontFamily: 'Poppins',
+            color: StyleStatics.lightText,
+            margin: 16,
+        },
+        showMoreButton: {
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            textAlign: 'center',
+            margin: 10,
+            display: 'flex',
+            textAlign: 'center',
+            fontFamily: 'Poppins-SemiBold',
+            color: StyleStatics.primary,
+        },
+        showMoreBox: {
+            display: 'flex',
+            fontSize: 16,    
         }
+
     })
 
     return (
@@ -120,6 +149,16 @@ export default function WAlert({ id }) {
                             {content}
                         </Text>
                     </View>
+                    { moreInfo &&
+                        <View style={styles.showMoreBox}>
+                            <Text 
+                                onPress={() => { setShowMoreInfo( !showMoreInfo ) }} 
+                                style={styles.showMoreButton}
+                            >Czytaj więcej</Text>
+                            <Text style={styles.moreInfoContent}>{moreInfo}</Text>
+                        </View>
+                    }
+                    
                     <View style={styles.buttonFooter}>
                         { buttons ? '' 
                         

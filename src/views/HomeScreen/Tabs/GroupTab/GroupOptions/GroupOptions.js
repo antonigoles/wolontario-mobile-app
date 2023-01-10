@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, Pressable } from 'react-native';
+import { View, Text, StyleSheet, Pressable, ScrollView } from 'react-native';
 import WLoadingAnimation from '../../../../../components/WLoadingAnimation'
 import WAlert from '../../../../../components/WAlert'
 import global from '../../../../../helpers/global';
@@ -10,6 +10,8 @@ import InfoIcon from '../../../../../../assets/icons/info.svg'
 import TimeLineIcon from '../../../../../../assets/icons/timeline.svg'
 import PersonIcon from '../../../../../../assets/icons/person.svg'
 import ComponentApear from '../../../../../animations/ComponentApear';
+import Animated from 'react-native-reanimated';
+import MegaphoneIcon from '../../../../../../assets/icons/megaphone.svg'
 
 export default function GroupOptions({ navigation, route }) {
     const [ user, setUser ] = useState(null);
@@ -44,6 +46,7 @@ export default function GroupOptions({ navigation, route }) {
         view: {
             display: 'flex',
             alignItems: 'center',
+            marginBottom: 25,
         },
         welcomeHeader: {
             margin: 15,
@@ -83,10 +86,31 @@ export default function GroupOptions({ navigation, route }) {
 
     })
 
+    const navigateToGroupAnnouncements = () => {
+        navigation.navigate('GroupAnnouncements', { 
+            displayGroup: route.params.displayGroup, 
+            isAdmin: isUserAdmin,
+        }); 
+    }
+
+    const navigateToGroupAdverts = () => {
+        navigation.navigate('GroupAdverts', { 
+            displayGroup: route.params.displayGroup, 
+        }); 
+    }
+
+    const navigateToTasks = () => {
+        navigation.navigate('GroupTasks', {
+            displayGroup: route.params.displayGroup, 
+            isAdmin: isUserAdmin,
+        })
+    }
+
     return (
-        <View>
+        <View style={{ width: "100%", height: "100%" }}>
             <WAlert id={"GroupOptionsAlert"} />
             { user ?  
+            <ScrollView>
                 <View style={styles.view}>
                     <View style={ styles.welcomeHeader }>
                         <Text style={ styles.headerMessage }> { user.name } {user.surname} </Text>
@@ -94,27 +118,28 @@ export default function GroupOptions({ navigation, route }) {
                             { isUserAdmin ? "Koordynator" : "Wolontariusz" } 
                         </Text>
                     </View>
-                    <ComponentApear>
-                        <ButtonsSection label="Opcje" />
-                        <OptionButton label="Zadania" Icon={ TimeLineIcon }/>
-                        <OptionButton 
-                            onClick={()=>{ 
-                                navigation.navigate('GroupAnnouncements', { 
-                                    displayGroup: route.params.displayGroup, 
-                                    isAdmin: isUserAdmin,
-                                }); 
-                            }} 
-                            label="Komunikaty" 
-                            Icon={ InfoIcon }
-                        />
-                        <OptionButton label="Członkowie" Icon={ PersonIcon }/>
-                    </ComponentApear>
-                    {/* { isUserAdmin ?
+                    <ButtonsSection label="Opcje" />
+                    <OptionButton 
+                        onClick={navigateToTasks}
+                        label="Zadania" 
+                        Icon={ TimeLineIcon }
+                    />
+                    <OptionButton 
+                        onClick={navigateToGroupAnnouncements} 
+                        label="Komunikaty" 
+                        Icon={ InfoIcon }
+                    />
+                    <OptionButton label="Członkowie" Icon={ PersonIcon }/>
+                { isUserAdmin &&
+                    <>
                         <ButtonsSection label="Opcje koordynatora" />
-                    : ''} */}
+                        <OptionButton onClick={navigateToGroupAdverts} label="Ogłoszenia" Icon={ MegaphoneIcon }/>
+                    </>
+                } 
                 </View>
+            </ScrollView>
             :
-                <WLoadingAnimation />
+            <WLoadingAnimation />
             }
             
         </View>
@@ -146,7 +171,7 @@ function ButtonsSection({ label }) {
 function OptionButton({ label, Icon, onClick }) {
     const styles = StyleSheet.create({
         optionButton: {
-            width: 330,
+            width: "90%",
             display: 'flex',
             flexDirection: 'row',
             alignItems: 'center',

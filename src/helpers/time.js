@@ -24,7 +24,7 @@ export default class {
         if ( daySpan > 0 ) {
             tsString = daySpan.toString()
             lastChar = Number(tsString[ tsString.length - 1 ])
-            result = `${daySpan} ${ lastChar == 1 ? 'dzień' : 'dni' }`
+            result = `${daySpan} ${ lastChar == 1 && tsString.length == 1 ? 'dzień' : 'dni' }`
         }
         if ( monthSpan > 0 ) {
             tsString = monthSpan.toString()

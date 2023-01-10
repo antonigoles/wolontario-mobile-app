@@ -4,7 +4,8 @@ import React from 'react'
 import { useState  } from 'react';
 import VisibilityOn from '../../assets/icons/visibilityOn.svg'
 import VisibilityOff from '../../assets/icons/visibilityOff.svg';
-
+import {Dimensions} from 'react-native';
+import global from '../helpers/global';
 
 
 export default function WTextForm({ 
@@ -24,19 +25,19 @@ export default function WTextForm({
   //   // val = useState("")
   // }
   const [ showSecured, setShowSecured ] = useState( isSecure )
-
-  let inputWidth = isSecure ? 305-56 : 305;
-  let halfInputWidth = isSecure ? 140-56 : 140;
-
+  let full = Dimensions.get('window').width * 0.85;
+  let inputWidth = isSecure ? full-56 : full;
+  let halfInputWidth = isSecure ? (full/2)-56 : full;
   const style = StyleSheet.create({
     view: {
   
     },
     label: {
-      fontWeight: 'bold',
+      fontFamily: 'Poppins-Bold',
+      // fontWeight: 'bold',
       marginBottom: 10,
       fontSize: 16,
-      width: 305,
+      width: full,
     },
   
     inputGroup: {
@@ -74,7 +75,7 @@ export default function WTextForm({
   return (
     <View style={ {
       ...containerStyle, 
-      ...( isHalfSize ? { width: 140 } : { width: 305 } ), 
+      ...( isHalfSize ? { width: full/2 } : { width: full } ), 
     }}
       >
       { label ? <Text style={style.label}>

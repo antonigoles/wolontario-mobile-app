@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import Animated, { useSharedValue, useAnimatedStyle, withTiming, Easing, withSequence } from "react-native-reanimated";
 
-export default function ComponentApear({ navigation, children }) {
+export default function ComponentApear({ navigation, children, style }) {
     const opacity = useSharedValue(0);
     const slide = useSharedValue(-400);
     const aStyle = useAnimatedStyle(() => {
@@ -44,7 +44,7 @@ export default function ComponentApear({ navigation, children }) {
     }, [])
 
     return (
-        <Animated.View style={aStyle}>
+        <Animated.View style={[aStyle, style]}>
             {children}
         </Animated.View>
     )

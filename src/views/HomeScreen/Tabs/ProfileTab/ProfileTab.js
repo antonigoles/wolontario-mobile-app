@@ -19,7 +19,7 @@ import GaleryIcon from '../../../../../assets/icons/galery.svg'
 import * as ImagePicker from 'expo-image-picker';
 import global from '../../../../helpers/global';
 import BrowseImages from '../../../Modals/BrowseImages';
-
+import { isLessThanTheMB, getFileInfo } from "../../../../helpers/fileUtils";
 
 
 export default function ProfileTab({navigation, userid}) {
@@ -28,7 +28,6 @@ export default function ProfileTab({navigation, userid}) {
     const [ browseImagesVisibility, setBrowseImagesVisibility] = useState( false );
     const [ browseImagesResult, setBrowseImagesResult ] = useState( null );
 
-    const [statusCamera, requestPermissionCamera ] = ImagePicker.useCameraPermissions();
     const [statusLibrary, requestPermissionLibrary ] = ImagePicker.useMediaLibraryPermissions();
 
     const [ aboutMe, setAboutMe ] = useState("")
@@ -237,7 +236,7 @@ export default function ProfileTab({navigation, userid}) {
             id = (await session.get()).data.id 
         }  
         const result = await users.fetchProfile( id )
-        result['avatarUrl'] = `${APICONFIG.API_URL}/user/avatar/${id}?r=${Math.ceil(999*Math.random())}`
+        
         // result['languages'] = result['languages'] ? result['languages'] : []
         // result['languages'] = [ { code: 'pl', level: 'NATIVE'}, { code: 'en', level: 'B1' }, { code: 'fr', level: 'A2' }]
         if ( result['aboutme'] != aboutMe ) 
@@ -247,6 +246,8 @@ export default function ProfileTab({navigation, userid}) {
         result['avatarUrl'] != userData['avatarUrl']) {
             setUserData(result)
         }   
+
+        result['avatarUrl'] = `${APICONFIG.API_URL}/user/avatar/${id}?r=${Math.ceil(999*Math.random())}`
 
         setAvatarUrl( result['avatarUrl'] )
         if ( JSON.stringify(result['languages']) != JSON.stringify(userLanguages) )
@@ -258,7 +259,6 @@ export default function ProfileTab({navigation, userid}) {
     };
 
     useEffect(() => {
-        
         const unsubscribe = navigation.addListener('focus', () => {
             reloadUser();
         })
@@ -273,30 +273,27 @@ export default function ProfileTab({navigation, userid}) {
         }
     }
 
-    const changeAvatarWithCamera = async ( ) => {
-        try { 
-            if ( !statusCamera ) await requestPermissionCamera()
-            const result = await ImagePicker.launchCameraAsync({
-                mediaTypes: ImagePicker.MediaTypeOptions.Images,
-            })
-            await users.uploadAvatar( result )
-            await reloadUser();
-        } catch ( err ) {
-            throw err;
-        }
-        
-    }
-
     const changeAvatarWithLibrary = async ( ) => {
         try {
             if ( !statusLibrary ) await requestPermissionLibrary()
+            if ( !statusLibrary ) return;
             const result = await ImagePicker.launchImageLibraryAsync({
                 mediaTypes: ImagePicker.MediaTypeOptions.Images,
+                quality: 1,
             })
+
+            if ( result.canceled ) return;
+
+            // const fileInfo = await getFileInfo( result.assets[0].uri );
+            if ( !isLessThanTheMB( fileInfo.size, 2 ) ) {
+                global.popUp("Uh oh", "Wydaje się że wybrany plik jest za duży :/ Maksymalny rozmiar to 2MB")
+                return;
+            }
+
             await users.uploadAvatar( result )
             await reloadUser();
         } catch ( err ) {
-            throw err;
+            global.popUp( "Oh nie",  `${err}` )
         }
         
     }
@@ -305,7 +302,7 @@ export default function ProfileTab({navigation, userid}) {
         try {
             setBrowseImagesVisibility(true)
         } catch(err) {
-            throw err;
+            global.popUp( "Oh nie",  `${err}` )
         }   
     }
 
@@ -313,17 +310,12 @@ export default function ProfileTab({navigation, userid}) {
         try {
             if ( browseImagesResult != null ) {
                 setTimeout( () => {
-                    if ( browseImagesResult == 'camera' ) {
-                        changeAvatarWithCamera();
-                    } else {
-                        changeAvatarWithLibrary();
-                    }
+                    changeAvatarWithLibrary();
                 }, 1000)
                 setBrowseImagesResult(null);
             }
         } catch( err ) {
-            alert( err )
-            throw err;
+            global.popUp( "Oh nie", `${err}` )
         }
     }, [browseImagesResult])
 
@@ -344,6 +336,7 @@ export default function ProfileTab({navigation, userid}) {
                 <ScrollView>
                     <View  style={styles.profileHeader}>
                         <Pressable onPress={ isOwner ? changeAvatar : null }>
+                            {/* <Text>{avatarUrl}</Text> */}
                             <WImage externalStyle={styles.avatar} url={avatarUrl} />
                             { isOwner ?
                             <View style={styles.changeAvatar}>  

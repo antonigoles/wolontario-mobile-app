@@ -21,6 +21,7 @@
     "babel-plugin-react-native-classname-to-style": "^1.2.2",
     "babel-plugin-react-native-platform-specific-extensions": "^1.1.1",
     "expo": "^47.0.9",
+    "expo-file-system": "^15.1.1",
     "expo-font": "~11.0.1",
     "expo-image-picker": "~14.0.2",
     "expo-splash-screen": "~0.17.5",

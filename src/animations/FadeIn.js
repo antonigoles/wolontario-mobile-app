@@ -6,6 +6,7 @@ export default function FadeIn({ navigation, children }) {
     const aStyle = useAnimatedStyle(() => {
         return {
             opacity: opacity.value,
+            // transform: [ { translateY: 10*(1-opacity.value) } ],
         }
     })
 
